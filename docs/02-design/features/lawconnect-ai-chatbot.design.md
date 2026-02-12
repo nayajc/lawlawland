@@ -40,8 +40,7 @@ lawlawland/
 │   │   │   ├── DisclaimerBanner.tsx  # 면책 조항 배너
 │   │   │   └── ConsultCTA.tsx        # "변호사 상담 받기" CTA 버튼
 │   │   ├── calculator/
-│   │   │   ├── ChildSupportCalc.tsx  # 양육비 계산기 컴포넌트
-│   │   │   ├── InputSlider.tsx       # 슬라이더 입력 UI
+│   │   │   ├── ChildSupportCalc.tsx  # 양육비 계산기 컴포넌트 (shadcn Slider 직접 사용)
 │   │   │   └── ResultCard.tsx        # 계산 결과 카드
 │   │   ├── consult/
 │   │   │   ├── ContactForm.tsx       # 연락처 입력 폼
@@ -61,17 +60,14 @@ lawlawland/
 │   │       └── ...
 │   ├── lib/
 │   │   ├── ai/
-│   │   │   ├── client.ts             # AI API 클라이언트 (Claude/GPT-4)
-│   │   │   ├── prompts.ts            # System Prompts (카테고리별)
+│   │   │   ├── prompts.ts            # System Prompts (base + category)
 │   │   │   ├── summarizer.ts         # 상담 내용 요약 생성
-│   │   │   └── categories.ts         # 상담 카테고리 정의
+│   │   │   └── categories.ts         # 상담 카테고리별 프롬프트
 │   │   ├── supabase/
 │   │   │   ├── client.ts             # Supabase 클라이언트 (브라우저)
-│   │   │   ├── server.ts             # Supabase 서버 클라이언트
-│   │   │   └── types.ts              # DB 타입 정의
+│   │   │   └── server.ts             # Supabase 서버 클라이언트
 │   │   ├── email/
-│   │   │   ├── resend.ts             # Resend 클라이언트
-│   │   │   └── templates.ts          # 이메일 HTML 템플릿
+│   │   │   └── resend.ts             # Resend 클라이언트 + HTML 템플릿
 │   │   ├── calculator/
 │   │   │   └── child-support.ts      # 양육비 산정 로직
 │   │   └── constants.ts              # 상수 정의
@@ -213,36 +209,33 @@ interface ChatMessage {
 ### 3.2 핵심 컴포넌트 인터페이스
 
 ```typescript
-// ChatContainer.tsx
-interface ChatContainerProps {
-  initialCategory?: string;
-}
+// ChatContainer.tsx - No props, reads from Zustand store + useChat hook
+// Uses @ai-sdk/react useChat() for streaming
 
 // MessageBubble.tsx
 interface MessageBubbleProps {
   message: ChatMessage;
-  isLatest: boolean;
+  isLatest?: boolean;
 }
 
 // ChatInput.tsx
 interface ChatInputProps {
   onSend: (message: string) => void;
   isLoading: boolean;
-  placeholder?: string;
+  placeholder?: string;  // default: '이혼 관련 궁금한 점을 물어보세요...'
 }
 
 // CategorySelector.tsx
 interface CategorySelectorProps {
-  selected: string | null;
-  onSelect: (category: string) => void;
+  selected: ChatCategory;
+  onSelect: (category: ChatCategory) => void;
 }
 
-// ContactForm.tsx
-interface ContactFormProps {
-  conversationId: string;
-  summary: string;
-  onSubmit: (data: ConsultationRequest) => Promise<void>;
-}
+// ContactForm.tsx - Self-contained, reads from Zustand store
+// Internally calls /api/consult and navigates to /consult/complete
+
+// ChatSummary.tsx - AI 상담 요약 미리보기
+// Reads messages from Zustand store, displays getSummaryForConsult()
 
 // ChildSupportCalc.tsx
 interface ChildSupportCalcProps {
@@ -260,27 +253,27 @@ Content-Type: application/json
 
 Request:
 {
-  "messages": ChatMessage[],
-  "category": string,
-  "sessionId": string
+  "messages": { role: string, content: string }[],
+  "category": ChatCategory,
+  "sessionId": string        // optional, for Supabase conversation persistence
 }
 
-Response: ReadableStream (text/event-stream)
-data: {"content": "이혼은 크게...", "done": false}
-data: {"content": "", "done": true, "category": "procedure"}
+Response: Vercel AI SDK Data Stream (toDataStreamResponse)
 ```
 
 **구현 핵심:**
-- Vercel AI SDK (`ai` 패키지) 활용한 스트리밍
-- `streamText()` with Claude API
+- Vercel AI SDK v4 (`ai` + `@ai-sdk/react`) 활용한 스트리밍
+- `streamText()` with Claude API + `toDataStreamResponse()`
 - 카테고리별 System Prompt 주입
-- 응답 끝에 면책 조항 자동 추가
+- `onFinish` 콜백에서 Supabase에 대화 저장 (sessionId 기반)
+- 클라이언트: `useChat({ api, body: { category, sessionId } })`
 
 ```typescript
 // /api/chat/route.ts 핵심 로직
 import { streamText } from 'ai';
 import { anthropic } from '@ai-sdk/anthropic';
 import { getSystemPrompt } from '@/lib/ai/prompts';
+import { createServerClient } from '@/lib/supabase/server';
 
 export async function POST(req: Request) {
   const { messages, category, sessionId } = await req.json();
@@ -289,6 +282,17 @@ export async function POST(req: Request) {
     model: anthropic('claude-sonnet-4-5-20250929'),
     system: getSystemPrompt(category),
     messages,
+    maxTokens: 1024,
+    async onFinish({ text }) {
+      // sessionId가 있으면 Supabase에 대화 저장
+      if (sessionId) {
+        const supabase = createServerClient();
+        await supabase.from('conversations').upsert({
+          session_id: sessionId, category,
+          messages: JSON.stringify(messages.concat({ role: 'assistant', content: text })),
+        }, { onConflict: 'session_id' });
+      }
+    },
   });
 
   return result.toDataStreamResponse();
@@ -378,6 +382,19 @@ const CATEGORY_PROMPTS: Record<string, string> = {
     자녀의 복리를 최우선으로 고려한다는 점을 강조하세요.
     양육비 산정기준표의 존재를 안내하세요.
   `,
+  'parental-authority': `
+    친권(부모권)에 관한 질문입니다.
+    친권과 양육권의 차이를 명확히 설명하세요.
+    민법 제909조~제927조를 기준으로 답변하세요.
+  `,
+  'name-change': `
+    이혼 후 성(姓)/본(本) 변경에 관한 질문입니다.
+    가사소송법 및 민법 제781조를 기준으로 답변하세요.
+  `,
+  'procedure': `
+    이혼 절차 전반에 관한 질문입니다.
+    협의이혼과 재판이혼 절차를 구분하여 안내하세요.
+  `,
   'general': `
     이혼 관련 일반적인 질문입니다.
     질문 내용을 파악하여 적절한 카테고리로 안내하세요.
@@ -392,18 +409,20 @@ const CATEGORY_PROMPTS: Record<string, string> = {
 interface ChatStore {
   // State
   messages: ChatMessage[];
-  category: string | null;
+  category: ChatCategory;         // ChatCategory union type (default: 'general')
   sessionId: string;
   isLoading: boolean;
   conversationId: string | null;
 
   // Actions
   addMessage: (message: ChatMessage) => void;
-  setCategory: (category: string) => void;
+  updateLastAssistantMessage: (content: string) => void;  // 스트리밍 업데이트용
+  setCategory: (category: ChatCategory) => void;
   setLoading: (loading: boolean) => void;
   setConversationId: (id: string) => void;
   clearChat: () => void;
-  getSummaryForConsult: () => string;
+  getMessagesForApi: () => { role: 'user' | 'assistant'; content: string }[];
+  getSummaryForConsult: () => string;   // 변호사 상담 요약 생성
 }
 ```
 
@@ -510,13 +529,11 @@ const colors = {
 ### 8.2 Typography
 
 ```css
-/* Pretendard - 본문 */
---font-body: 'Pretendard Variable', -apple-system, sans-serif;
+/* Pretendard Variable - 본문 (CDN 로드) */
+--font-sans: 'Pretendard Variable', var(--font-geist-sans), -apple-system, sans-serif;
+/* Geist는 Latin 문자 fallback으로 유지 */
 
-/* Noto Serif KR - 법률 인용, 강조 */
---font-serif: 'Noto Serif KR', serif;
-
-/* Scale */
+/* Scale - Tailwind 기본 스케일 사용 */
 --text-xs: 0.75rem;    /* 12px - 보조 텍스트 */
 --text-sm: 0.875rem;   /* 14px - 캡션, 면책조항 */
 --text-base: 1rem;     /* 16px - 본문, 채팅 메시지 */
@@ -589,26 +606,28 @@ Phase 5: 랜딩 + 마감
 ```json
 {
   "dependencies": {
-    "next": "^15.0.0",
+    "next": "^16.0.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "@ai-sdk/anthropic": "^1.0.0",
+    "@ai-sdk/react": "^1.0.0",
     "ai": "^4.0.0",
     "@supabase/supabase-js": "^2.45.0",
     "@supabase/ssr": "^0.5.0",
-    "resend": "^4.0.0",
+    "resend": "^6.0.0",
     "zustand": "^5.0.0",
-    "framer-motion": "^11.0.0",
-    "lucide-react": "^0.400.0",
+    "framer-motion": "^12.0.0",
+    "lucide-react": "^0.500.0",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
-    "tailwind-merge": "^2.5.0"
+    "tailwind-merge": "^3.0.0"
   },
   "devDependencies": {
     "typescript": "^5.6.0",
-    "tailwindcss": "^3.4.0",
+    "tailwindcss": "^4.0.0",
+    "@tailwindcss/postcss": "^4.0.0",
     "@types/react": "^19.0.0",
-    "@types/node": "^22.0.0"
+    "@types/node": "^20.0.0"
   }
 }
 ```
