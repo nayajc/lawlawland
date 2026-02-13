@@ -2,13 +2,13 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { MessageCircle, Calculator, BookOpen, Phone, User } from 'lucide-react';
+import { MessageCircle, Calculator, BookOpen, Phone, User, Trophy } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const items = [
   { href: '/about', label: '소개', icon: User },
+  { href: '/cases', label: '승소사례', icon: Trophy },
   { href: '/chat', label: 'AI 상담', icon: MessageCircle },
-  { href: '/calculator', label: '양육비', icon: Calculator },
   { href: '/guide', label: '가이드', icon: BookOpen },
   { href: '/consult', label: '상담 신청', icon: Phone },
 ];
