@@ -15,9 +15,12 @@ const items = [
 export function MobileNav() {
   const pathname = usePathname();
 
+  // 채팅 페이지에서는 하단 네비 숨김 (입력창과 겹침 방지)
+  if (pathname === '/chat') return null;
+
   return (
-    <nav className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-md border-t border-gray-100 safe-bottom">
-      <div className="flex items-center justify-around h-16 px-2">
+    <nav className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-md border-t border-gray-100 pb-[env(safe-area-inset-bottom,0px)]">
+      <div className="flex items-center justify-around h-14 px-2">
         {items.map((item) => {
           const isActive = pathname === item.href;
           return (

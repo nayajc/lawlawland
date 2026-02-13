@@ -63,7 +63,7 @@ export function ChatContainer() {
   };
 
   return (
-    <div className="flex flex-col h-[calc(100vh-3.5rem-4rem)] md:h-[calc(100vh-3.5rem)]">
+    <div className="flex flex-col h-[calc(100dvh-3.5rem)]">
       <DisclaimerBanner />
       <CategorySelector selected={category} onSelect={setCategory} />
 
@@ -100,8 +100,7 @@ export function ChatContainer() {
         </div>
       </div>
 
-      <ConsultCTA />
-      <ChatInput onSend={handleSend} isLoading={isLoading} />
+      <ChatInput onSend={handleSend} isLoading={isLoading} consultCTA={<ConsultCTA />} />
     </div>
   );
 }
