@@ -3,7 +3,7 @@ import { DISCLAIMER_TEXT } from '@/lib/constants';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: '양육비 계산기 - LawLawLand',
+  title: '양육비 계산기 - 오수진 변호사',
   description: '부모 소득, 자녀 수, 연령을 입력하면 예상 양육비를 산출해드립니다.',
 };
 

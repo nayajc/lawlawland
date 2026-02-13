@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: '상담 요청 완료 - LawLawLand',
+  title: '상담 요청 완료 - 오수진 변호사',
 };
 
 export default function ConsultCompletePage() {
@@ -15,10 +15,10 @@ export default function ConsultCompletePage() {
       </div>
       <h1 className="text-2xl font-bold text-gray-900 mb-2">상담 요청이 완료되었습니다</h1>
       <p className="text-gray-500 mb-2">
-        담당 변호사가 영업일 기준 1~2일 이내에 연락드릴 예정입니다.
+        오수진 변호사가 영업일 기준 1~2일 이내에 연락드릴 예정입니다.
       </p>
       <p className="text-sm text-gray-400 mb-8">
-        AI 상담 내용을 요약하여 변호사에게 이메일로 전달하였습니다.
+        AI 상담 대화 내용을 오수진 변호사에게 이메일로 전달하였습니다.
       </p>
       <div className="flex gap-3 justify-center">
         <Link href="/">

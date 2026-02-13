@@ -25,9 +25,9 @@ export function TrustIndicators() {
           <div className="flex items-start gap-3">
             <Shield className="w-5 h-5 text-emerald-500 shrink-0 mt-0.5" />
             <div>
-              <p className="text-sm font-medium text-gray-800 mb-1">전문가 연결</p>
+              <p className="text-sm font-medium text-gray-800 mb-1">오수진 변호사 직접 상담</p>
               <p className="text-xs text-gray-500 leading-relaxed">
-                필요시 전문 변호사에게 상담을 연결해드립니다. AI 상담 내용을 요약하여 전달합니다.
+                AI 상담 후 필요시 오수진 변호사에게 직접 상담을 연결해드립니다. 대화 내용이 함께 전달됩니다.
               </p>
             </div>
           </div>

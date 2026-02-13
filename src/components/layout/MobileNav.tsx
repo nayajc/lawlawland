@@ -9,7 +9,7 @@ const items = [
   { href: '/chat', label: 'AI 상담', icon: MessageCircle },
   { href: '/calculator', label: '양육비 계산', icon: Calculator },
   { href: '/guide', label: '가이드', icon: BookOpen },
-  { href: '/consult', label: '변호사 상담', icon: Phone },
+  { href: '/consult', label: '상담 신청', icon: Phone },
 ];
 
 export function MobileNav() {

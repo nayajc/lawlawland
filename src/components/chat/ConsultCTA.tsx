@@ -15,7 +15,7 @@ export function ConsultCTA() {
       className="inline-flex items-center gap-1.5 bg-indigo-600 text-white rounded-full px-3 py-1.5 text-xs font-medium hover:bg-indigo-700 transition-colors shadow-sm"
     >
       <Phone className="w-3 h-3" />
-      변호사 상담
+      상담 신청
     </Link>
   );
 }

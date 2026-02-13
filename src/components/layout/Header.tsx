@@ -9,7 +9,7 @@ const navItems = [
   { href: '/chat', label: 'AI 상담' },
   { href: '/calculator', label: '양육비 계산' },
   { href: '/guide', label: '이혼 가이드' },
-  { href: '/consult', label: '변호사 상담' },
+  { href: '/consult', label: '상담 신청' },
 ];
 
 export function Header() {
@@ -22,9 +22,10 @@ export function Header() {
           <div className="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center">
             <Scale className="w-4 h-4 text-white" />
           </div>
-          <span className="font-bold text-lg text-gray-900">
-            Law<span className="text-indigo-600">Law</span>Land
-          </span>
+          <div className="flex flex-col leading-tight">
+            <span className="font-bold text-base text-gray-900">오수진 변호사</span>
+            <span className="text-[10px] text-indigo-600 font-medium -mt-0.5">이혼전문변호사</span>
+          </div>
         </Link>
 
         <nav className="hidden md:flex items-center gap-1">

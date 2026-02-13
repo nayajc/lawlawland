@@ -20,8 +20,8 @@ const features = [
   {
     href: '/consult',
     icon: Phone,
-    title: '변호사 상담 연결',
-    description: 'AI 상담 내용을 요약하여 전문 변호사에게 전달해드립니다',
+    title: '오수진 변호사 상담 신청',
+    description: 'AI 상담 내용을 바탕으로 오수진 변호사에게 직접 상담을 신청하세요',
     color: 'bg-emerald-50 text-emerald-600',
   },
 ];

@@ -65,13 +65,13 @@ export async function sendConsultationEmail(params: SendConsultEmailParams) {
   const conversationHtml = formatConversationHtml(summary);
 
   const { data, error } = await resend.emails.send({
-    from: 'LawLawLand <noreply@dalbit.club>',
+    from: '오수진 변호사 AI 상담 <noreply@dalbit.club>',
     to: lawyerEmail,
-    subject: `[LawLawLand] 새 상담 요청 - ${clientName}님 (${categoryLabel})`,
+    subject: `[오수진변호사] 새 상담 요청 - ${clientName}님 (${categoryLabel})`,
     html: `
       <div style="font-family: 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif; max-width: 600px; margin: 0 auto; padding: 24px;">
         <div style="border-bottom: 2px solid #4F46E5; padding-bottom: 16px; margin-bottom: 24px;">
-          <h1 style="color: #4F46E5; font-size: 20px; margin: 0;">LawLawLand 상담 요청</h1>
+          <h1 style="color: #4F46E5; font-size: 20px; margin: 0;">오수진 변호사 상담 요청</h1>
           <p style="color: #6B7280; font-size: 13px; margin: 4px 0 0 0;">${date}</p>
         </div>
 
@@ -92,7 +92,7 @@ export async function sendConsultationEmail(params: SendConsultEmailParams) {
         </div>
 
         <div style="border-top: 1px solid #E5E7EB; padding-top: 16px; color: #9CA3AF; font-size: 12px;">
-          이 메일은 LawLawLand에서 자동 발송되었습니다.
+          이 메일은 오수진 변호사 AI 상담 시스템에서 자동 발송되었습니다.
         </div>
       </div>
     `,

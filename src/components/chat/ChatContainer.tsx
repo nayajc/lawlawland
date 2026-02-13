@@ -73,7 +73,7 @@ export function ChatContainer() {
                 <MessageCircle className="w-8 h-8 text-indigo-400" />
               </div>
               <h2 className="text-lg font-semibold text-gray-800 mb-2">
-                안녕하세요, LawLawLand AI입니다
+                안녕하세요, 오수진 변호사 AI 상담입니다
               </h2>
               <p className="text-sm text-gray-500 max-w-sm leading-relaxed">
                 이혼 관련 법률 정보가 궁금하시면 편하게 질문해주세요.
