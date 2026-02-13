@@ -63,7 +63,7 @@ export function ChatContainer() {
   };
 
   return (
-    <div className="flex flex-col h-[calc(100dvh-3.5rem)]">
+    <div className="flex flex-col h-[calc(100dvh-3.5rem)] md:h-[calc(100dvh-8rem)]">
       <DisclaimerBanner />
       <CategorySelector selected={category} onSelect={setCategory} />
 
