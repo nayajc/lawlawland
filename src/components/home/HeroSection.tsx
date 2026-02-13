@@ -10,12 +10,13 @@ export function HeroSection() {
         <div className="flex flex-col md:flex-row items-center gap-8 md:gap-12">
           {/* Profile Photo */}
           <div className="shrink-0">
-            <div className="relative w-48 h-48 md:w-56 md:h-56 rounded-2xl overflow-hidden shadow-lg border-4 border-white">
+            <div className="rounded-2xl overflow-hidden shadow-lg border-4 border-white">
               <Image
                 src="/lawyer-profile.png"
                 alt="오수진 변호사"
-                fill
-                className="object-cover"
+                width={280}
+                height={350}
+                className="w-48 md:w-64 h-auto"
                 priority
               />
             </div>
