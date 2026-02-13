@@ -32,11 +32,13 @@ export function FeatureCards() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {features.map((feat) => (
           <Link key={feat.href} href={feat.href}>
-            <Card className="p-6 hover:shadow-md transition-shadow cursor-pointer border-gray-100 h-full">
-              <div className={`w-10 h-10 rounded-lg flex items-center justify-center mb-4 ${feat.color}`}>
-                <feat.icon className="w-5 h-5" />
+            <Card className="p-5 hover:shadow-md transition-shadow cursor-pointer border-gray-100 h-full">
+              <div className="flex items-center gap-3 mb-2">
+                <div className={`w-10 h-10 rounded-lg flex items-center justify-center shrink-0 ${feat.color}`}>
+                  <feat.icon className="w-5 h-5" />
+                </div>
+                <h3 className="font-bold text-gray-900">{feat.title}</h3>
               </div>
-              <h3 className="font-semibold text-gray-900 mb-1">{feat.title}</h3>
               <p className="text-sm text-gray-500 leading-relaxed">{feat.description}</p>
             </Card>
           </Link>
