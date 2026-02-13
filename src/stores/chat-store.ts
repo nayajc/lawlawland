@@ -62,8 +62,8 @@ export const useChatStore = create<ChatStore>((set, get) => ({
   getSummaryForConsult: () => {
     const msgs = get().messages;
     if (msgs.length === 0) return '(AI 상담 내역 없음)';
-    const userMessages = msgs.filter((m) => m.role === 'user').map((m) => m.content);
-    const aiMessages = msgs.filter((m) => m.role === 'assistant').map((m) => m.content);
-    return `[사용자 질문 요약]\n${userMessages.slice(0, 5).join('\n')}\n\n[AI 안내 요약]\n${aiMessages.slice(0, 3).map((m) => m.substring(0, 200)).join('\n')}`;
+    return msgs
+      .map((m) => `[${m.role === 'user' ? '사용자' : 'AI 상담'}]\n${m.content}`)
+      .join('\n\n');
   },
 }));
