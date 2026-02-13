@@ -37,7 +37,9 @@ export default function CasesPage() {
     setLoading(true);
     try {
       const res = await fetch(`/api/cases?page=${pageNum}`);
+      if (!res.ok) return;
       const data = await res.json();
+      if (!data.posts) return;
       if (pageNum === 1) {
         setPosts(data.posts);
       } else {

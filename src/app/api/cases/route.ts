@@ -23,12 +23,14 @@ export async function GET(req: Request) {
 
     const res = await fetch(url, {
       headers: { 'User-Agent': 'Mozilla/5.0', Referer: `https://blog.naver.com/${BLOG_ID}` },
-      next: { revalidate: 3600 },
     });
 
     if (!res.ok) throw new Error('Naver API error');
 
-    const data: NaverResponse = await res.json();
+    // Naver returns invalid JSON with \' escapes — fix before parsing
+    const raw = await res.text();
+    const fixed = raw.replace(/\\'/g, "'");
+    const data: NaverResponse = JSON.parse(fixed);
 
     const posts = data.postList.map((p) => {
       const title = decodeURIComponent(p.title.replace(/\+/g, ' '));
