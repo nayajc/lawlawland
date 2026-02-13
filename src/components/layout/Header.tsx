@@ -6,6 +6,7 @@ import { Scale } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const navItems = [
+  { href: '/about', label: '변호사 소개' },
   { href: '/chat', label: 'AI 상담' },
   { href: '/calculator', label: '양육비 계산' },
   { href: '/guide', label: '이혼 가이드' },
