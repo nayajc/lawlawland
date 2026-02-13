@@ -65,7 +65,7 @@ export async function sendConsultationEmail(params: SendConsultEmailParams) {
   const conversationHtml = formatConversationHtml(summary);
 
   const { data, error } = await resend.emails.send({
-    from: 'LawLawLand <onboarding@resend.dev>',
+    from: 'LawLawLand <noreply@dalibit.club>',
     to: lawyerEmail,
     subject: `[LawLawLand] 새 상담 요청 - ${clientName}님 (${categoryLabel})`,
     html: `
