@@ -25,24 +25,22 @@ export function ChatContainer() {
     body: { category, sessionId },
   });
 
-  // Sync messages to store for consult summary
+  // Sync assistant messages to store after streaming completes
   useEffect(() => {
-    if (messages.length > storeMessages.length) {
-      const latest = messages[messages.length - 1];
-      if (latest && latest.role === 'assistant' && latest.content) {
-        const storeMsg: ChatMessage = {
-          id: latest.id,
+    if (isLoading) return;
+    for (const msg of messages) {
+      if (msg.role !== 'assistant' || !msg.content) continue;
+      if (!storeMessages.find((m) => m.id === msg.id)) {
+        addMessage({
+          id: msg.id,
           role: 'assistant',
-          content: latest.content,
+          content: msg.content,
           category,
           timestamp: new Date().toISOString(),
-        };
-        if (!storeMessages.find((m) => m.id === latest.id)) {
-          addMessage(storeMsg);
-        }
+        });
       }
     }
-  }, [messages, storeMessages, addMessage, category]);
+  }, [isLoading, messages, storeMessages, addMessage, category]);
 
   // Auto scroll
   useEffect(() => {
