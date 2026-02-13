@@ -127,7 +127,14 @@ export default function CasesPage() {
               <Card
                 key={post.id}
                 className="p-4 border-gray-100 hover:shadow-md hover:border-indigo-100 transition-all cursor-pointer"
-                onClick={() => setSelectedPost(post)}
+                onClick={() => {
+                  // 모바일에서는 iframe이 차단되므로 새 탭으로 열기
+                  if (window.innerWidth < 768) {
+                    window.open(post.url, '_blank');
+                  } else {
+                    setSelectedPost(post);
+                  }
+                }}
               >
                 <div className="flex items-start gap-3">
                   <span className={`inline-block text-[11px] px-2 py-0.5 rounded-full border font-medium shrink-0 mt-0.5 ${CATEGORY_COLORS[post.category] || CATEGORY_COLORS['기타']}`}>
