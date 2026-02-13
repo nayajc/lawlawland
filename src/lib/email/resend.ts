@@ -30,7 +30,7 @@ export async function sendConsultationEmail(params: SendConsultEmailParams) {
   const date = new Date().toLocaleString('ko-KR', { timeZone: 'Asia/Seoul' });
 
   const { data, error } = await resend.emails.send({
-    from: 'LawLawLand <noreply@lawlawland.co.kr>',
+    from: 'LawLawLand <onboarding@resend.dev>',
     to: lawyerEmail,
     subject: `[LawLawLand] 새 상담 요청 - ${categoryLabel}`,
     html: `
