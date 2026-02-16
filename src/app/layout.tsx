@@ -32,6 +32,11 @@ export const metadata: Metadata = {
   alternates: {
     canonical: 'https://ohsoojin.com',
   },
+  verification: {
+    other: {
+      'naver-site-verification': '69bc2016ffd29d36c5854a69d5a9b342a7eb5329',
+    },
+  },
 };
 
 export default function RootLayout({
