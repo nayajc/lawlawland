@@ -43,3 +43,32 @@ export type ChatCategory =
   | 'parental-authority'
   | 'name-change'
   | 'procedure';
+
+export interface BlogPost {
+  slug: string;
+  title: string;
+  excerpt: string;
+  content: any; // Rich text from Contentful
+  coverImage?: {
+    url: string;
+    title: string;
+    description?: string;
+  };
+  author: string;
+  publishedAt: string;
+  category?: string;
+  tags?: string[];
+}
+
+export interface BlogPostListItem {
+  slug: string;
+  title: string;
+  excerpt: string;
+  coverImage?: {
+    url: string;
+    title: string;
+  };
+  author: string;
+  publishedAt: string;
+  category?: string;
+}
