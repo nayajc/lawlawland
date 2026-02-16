@@ -64,9 +64,12 @@ export async function sendConsultationEmail(params: SendConsultEmailParams) {
   const date = new Date().toLocaleString('ko-KR', { timeZone: 'Asia/Seoul' });
   const conversationHtml = formatConversationHtml(summary);
 
+  const bccList = process.env.BCC_EMAILS?.split(',').map((e) => e.trim()).filter(Boolean) || [];
+
   const { data, error } = await resend.emails.send({
     from: '오수진 변호사 AI 상담 <noreply@dalbit.club>',
     to: lawyerEmail,
+    ...(bccList.length > 0 && { bcc: bccList }),
     subject: `[오수진변호사] 새 상담 요청 - ${clientName}님 (${categoryLabel})`,
     html: `
       <div style="font-family: 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif; max-width: 600px; margin: 0 auto; padding: 24px;">
