@@ -88,7 +88,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
             <span>•</span>
             <time dateTime={post.publishedAt}>{formattedDate}</time>
           </div>
-          {post.tags && post.tags.length > 0 && (
+          {post.tags && Array.isArray(post.tags) && post.tags.length > 0 && (
             <div className="flex flex-wrap gap-2 mt-4">
               {post.tags.map((tag) => (
                 <span
