@@ -72,10 +72,10 @@ export function ChatContainer() {
               <div className="w-16 h-16 bg-indigo-50 rounded-2xl flex items-center justify-center mb-4">
                 <MessageCircle className="w-8 h-8 text-indigo-400" />
               </div>
-              <h2 className="text-lg font-semibold text-gray-800 mb-2">
+              <h2 className="text-xl md:text-2xl font-bold text-gray-800 mb-3">
                 안녕하세요, 오수진 변호사 AI 상담입니다
               </h2>
-              <p className="text-sm text-gray-500 max-w-sm leading-relaxed">
+              <p className="text-sm md:text-base text-gray-500 max-w-sm leading-relaxed">
                 이혼 관련 법률 정보가 궁금하시면 편하게 질문해주세요.
                 <br />
                 위 카테고리를 선택하면 더 정확한 안내를 받으실 수 있습니다.

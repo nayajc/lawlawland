@@ -12,7 +12,7 @@ interface CategorySelectorProps {
 
 export function CategorySelector({ selected, onSelect }: CategorySelectorProps) {
   return (
-    <div className="flex gap-2 overflow-x-auto scrollbar-hide px-4 py-3">
+    <div className="flex gap-2 overflow-x-auto scrollbar-hide px-4 py-3 md:justify-center">
       {CATEGORIES.map((cat) => (
         <Badge
           key={cat.id}
