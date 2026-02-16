@@ -1,5 +1,4 @@
 import { ChildSupportCalc } from '@/components/calculator/ChildSupportCalc';
-import { DISCLAIMER_TEXT } from '@/lib/constants';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -17,7 +16,6 @@ export default function CalculatorPage() {
         </p>
       </div>
       <ChildSupportCalc />
-      <p className="text-xs text-gray-400 mt-6 text-center leading-relaxed">{DISCLAIMER_TEXT}</p>
     </div>
   );
 }
