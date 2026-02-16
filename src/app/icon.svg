@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+  <rect width="64" height="64" rx="14" fill="#4F46E5"/>
+  <!-- Pillar -->
+  <rect x="30" y="18" width="4" height="30" rx="1" fill="white"/>
+  <!-- Base -->
+  <rect x="22" y="46" width="20" height="4" rx="2" fill="white"/>
+  <!-- Top beam -->
+  <rect x="12" y="16" width="40" height="3.5" rx="1.75" fill="white"/>
+  <!-- Left chain -->
+  <line x1="18" y1="19.5" x2="18" y2="30" stroke="white" stroke-width="2" stroke-linecap="round"/>
+  <!-- Right chain -->
+  <line x1="46" y1="19.5" x2="46" y2="26" stroke="white" stroke-width="2" stroke-linecap="round"/>
+  <!-- Left pan (lower = heavier = winning) -->
+  <path d="M10 30 Q14 38 18 38 Q22 38 26 30 Z" fill="white" opacity="0.9"/>
+  <!-- Right pan (higher = lighter) -->
+  <path d="M38 26 Q42 34 46 34 Q50 34 54 26 Z" fill="white" opacity="0.9"/>
+  <!-- Top circle -->
+  <circle cx="32" cy="14" r="4" fill="white"/>
+</svg>
