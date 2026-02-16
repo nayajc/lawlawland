@@ -4,14 +4,18 @@ import type { BlogPost, BlogPostListItem } from '@/types';
 const spaceId = process.env.CONTENTFUL_SPACE_ID || '';
 const accessToken = process.env.CONTENTFUL_ACCESS_TOKEN || '';
 
-if (!spaceId || !accessToken) {
+const hasValidCredentials = spaceId && accessToken &&
+  spaceId !== 'your-space-id' &&
+  accessToken !== 'your-access-token';
+
+if (!hasValidCredentials) {
   console.warn('Contentful credentials not configured. Blog features will not work.');
 }
 
-export const contentfulClient = createClient({
+export const contentfulClient = hasValidCredentials ? createClient({
   space: spaceId,
   accessToken: accessToken,
-});
+}) : null;
 
 function mapEntryToBlogPost(entry: any): BlogPost {
   const fields = entry.fields;
@@ -53,6 +57,10 @@ function mapEntryToBlogPostListItem(entry: any): BlogPostListItem {
 }
 
 export async function getAllBlogPosts(): Promise<BlogPostListItem[]> {
+  if (!contentfulClient) {
+    return [];
+  }
+
   try {
     const entries = await contentfulClient.getEntries({
       content_type: 'blogPost',
@@ -67,6 +75,10 @@ export async function getAllBlogPosts(): Promise<BlogPostListItem[]> {
 }
 
 export async function getBlogPostBySlug(slug: string): Promise<BlogPost | null> {
+  if (!contentfulClient) {
+    return null;
+  }
+
   try {
     const entries = await contentfulClient.getEntries({
       content_type: 'blogPost',
@@ -86,6 +98,10 @@ export async function getBlogPostBySlug(slug: string): Promise<BlogPost | null> 
 }
 
 export async function getAllBlogPostSlugs(): Promise<string[]> {
+  if (!contentfulClient) {
+    return [];
+  }
+
   try {
     const entries = await contentfulClient.getEntries({
       content_type: 'blogPost',
