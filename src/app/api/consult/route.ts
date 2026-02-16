@@ -1,8 +1,8 @@
 import { NextResponse } from 'next/server';
 import type { ConsultationRequest } from '@/types';
 
-const isMockMode = !process.env.NEXT_PUBLIC_SUPABASE_URL ||
-  process.env.NEXT_PUBLIC_SUPABASE_URL === 'https://your-project.supabase.co';
+const hasSupabase = process.env.NEXT_PUBLIC_SUPABASE_URL &&
+  process.env.NEXT_PUBLIC_SUPABASE_URL !== 'https://your-project.supabase.co';
 
 export async function POST(req: Request) {
   try {
@@ -15,57 +15,41 @@ export async function POST(req: Request) {
       );
     }
 
-    if (isMockMode) {
-      console.log('[MOCK] Consultation request received:', {
-        name: body.name,
-        phone: body.phone,
-        email: body.email,
-        preferredTime: body.preferredTime,
-        summaryLength: body.summary.length,
-      });
-
-      return NextResponse.json({
-        success: true,
-        requestId: `mock_${Date.now()}`,
-        message: '[테스트 모드] 상담 요청이 접수되었습니다.',
-      });
-    }
-
-    // Real mode
-    const { sendConsultationEmail } = await import('@/lib/email/resend');
-
     let requestId: string | null = null;
 
-    // 1. DB 저장 시도 (실패해도 이메일은 발송)
-    try {
-      const { createServerClient } = await import('@/lib/supabase/server');
-      const supabase = createServerClient();
+    // 1. DB 저장 시도 (Supabase 설정된 경우만, 실패해도 이메일은 발송)
+    if (hasSupabase) {
+      try {
+        const { createServerClient } = await import('@/lib/supabase/server');
+        const supabase = createServerClient();
 
-      const { data: request, error: insertError } = await supabase
-        .from('consultation_requests')
-        .insert({
-          conversation_id: body.conversationId || null,
-          name: body.name,
-          phone: body.phone,
-          email: body.email || null,
-          preferred_time: body.preferredTime || null,
-          privacy_agreed: body.privacyAgreed,
-          summary: body.summary,
-          status: 'pending',
-        })
-        .select('id')
-        .single();
+        const { data: request, error: insertError } = await supabase
+          .from('consultation_requests')
+          .insert({
+            conversation_id: body.conversationId || null,
+            name: body.name,
+            phone: body.phone,
+            email: body.email || null,
+            preferred_time: body.preferredTime || null,
+            privacy_agreed: body.privacyAgreed,
+            summary: body.summary,
+            status: 'pending',
+          })
+          .select('id')
+          .single();
 
-      if (insertError) {
-        console.error('DB insert error:', insertError);
-      } else {
-        requestId = request.id;
+        if (insertError) {
+          console.error('DB insert error:', insertError);
+        } else {
+          requestId = request.id;
+        }
+      } catch (dbError) {
+        console.error('DB connection error:', dbError);
       }
-    } catch (dbError) {
-      console.error('DB connection error:', dbError);
     }
 
-    // 2. 이메일 발송 (DB 성공 여부와 무관하게 시도)
+    // 2. 이메일 발송 (DB 성공 여부와 무관하게 항상 시도)
+    const { sendConsultationEmail } = await import('@/lib/email/resend');
     const lawyerEmail = process.env.LAWYER_EMAIL;
     if (!lawyerEmail) {
       console.error('LAWYER_EMAIL env var is not set');
