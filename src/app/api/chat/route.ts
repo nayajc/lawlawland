@@ -18,10 +18,9 @@ function getMockResponse(category: ChatCategory, lastMessage: string): string {
 }
 
 export async function POST(req: Request) {
-  const { messages, category, sessionId } = (await req.json()) as {
+  const { messages, category } = (await req.json()) as {
     messages: { role: 'user' | 'assistant'; content: string }[];
     category: ChatCategory;
-    sessionId?: string;
   };
 
   const isMockMode = !process.env.ANTHROPIC_API_KEY || process.env.ANTHROPIC_API_KEY === 'sk-ant-your-key';
@@ -58,33 +57,12 @@ export async function POST(req: Request) {
   // Real mode with Anthropic API
   const { streamText } = await import('ai');
   const { anthropic } = await import('@ai-sdk/anthropic');
-  const { createServerClient } = await import('@/lib/supabase/server');
 
   const result = streamText({
     model: anthropic('claude-sonnet-4-5-20250929'),
     system: getSystemPrompt(category),
     messages,
     maxTokens: 1024,
-    async onFinish({ text }) {
-      if (sessionId) {
-        try {
-          const supabase = createServerClient();
-          await supabase
-            .from('conversations')
-            .upsert(
-              {
-                session_id: sessionId,
-                category,
-                messages: JSON.stringify(messages.concat({ role: 'assistant', content: text })),
-                updated_at: new Date().toISOString(),
-              },
-              { onConflict: 'session_id' }
-            );
-        } catch {
-          // Non-blocking
-        }
-      }
-    },
   });
 
   return result.toDataStreamResponse();
