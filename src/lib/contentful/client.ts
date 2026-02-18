@@ -53,6 +53,7 @@ function mapEntryToBlogPostListItem(entry: any): BlogPostListItem {
     author: fields.author,
     publishedAt: fields.publishedAt,
     category: fields.category,
+    tags: Array.isArray(fields.tags) ? fields.tags : undefined,
   };
 }
 

@@ -71,4 +71,5 @@ export interface BlogPostListItem {
   author: string;
   publishedAt: string;
   category?: string;
+  tags?: string[];
 }
