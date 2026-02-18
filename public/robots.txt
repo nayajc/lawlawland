@@ -1,0 +1,11 @@
+# Naver Yeti bot
+User-agent: Yeti
+Allow: /
+
+# All other bots
+User-agent: *
+Allow: /
+Disallow: /api/
+
+# Sitemap
+Sitemap: https://ohsoojin.com/sitemap.xml

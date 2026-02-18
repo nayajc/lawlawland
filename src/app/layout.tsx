@@ -46,6 +46,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko">
+      <head>
+        <link rel="alternate" type="application/rss+xml" href="https://ohsoojin.com/feed" title="오수진 변호사 블로그" />
+      </head>
       <body className={`${geistSans.variable} font-sans antialiased bg-gray-50`}>
         <script
           type="application/ld+json"
@@ -70,6 +73,23 @@ export default function RootLayout({
               hasCredential: [
                 { '@type': 'EducationalOccupationalCredential', credentialCategory: '변호사', dateCreated: '2012' },
                 { '@type': 'EducationalOccupationalCredential', credentialCategory: '변리사', dateCreated: '2013' },
+              ],
+            }),
+          }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              '@context': 'https://schema.org',
+              '@type': 'Organization',
+              name: '오수진 변호사',
+              url: 'https://ohsoojin.com',
+              logo: 'https://ohsoojin.com/og-image.png',
+              description: '이혼 전문 변호사 오수진의 공식 웹사이트',
+              sameAs: [
+                'https://www.youtube.com/@ohsoojin',
+                'https://www.instagram.com/ohsoojin',
               ],
             }),
           }}
