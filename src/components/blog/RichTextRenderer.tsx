@@ -37,13 +37,13 @@ const renderOptions = {
       <h6 className="text-sm font-bold text-gray-900 mt-4 mb-2">{children}</h6>
     ),
     [BLOCKS.UL_LIST]: (_node: any, children: any) => (
-      <ul className="list-disc list-inside mb-4 space-y-2 ml-4">{children}</ul>
+      <ul className="list-disc list-outside mb-4 space-y-1 pl-5">{children}</ul>
     ),
     [BLOCKS.OL_LIST]: (_node: any, children: any) => (
-      <ol className="list-decimal list-inside mb-4 space-y-2 ml-4">{children}</ol>
+      <ol className="list-decimal list-outside mb-4 space-y-1 pl-5">{children}</ol>
     ),
     [BLOCKS.LIST_ITEM]: (_node: any, children: any) => (
-      <li className="text-gray-700">{children}</li>
+      <li className="text-gray-700 [&>p]:mb-0 [&>p]:mt-0">{children}</li>
     ),
     [BLOCKS.QUOTE]: (_node: any, children: any) => (
       <blockquote className="border-l-4 border-indigo-500 pl-4 italic text-gray-600 my-6">
