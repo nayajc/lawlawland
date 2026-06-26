@@ -22,12 +22,12 @@ export function Header() {
     <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-100">
       <div className="max-w-5xl mx-auto px-4 h-14 flex items-center justify-between">
         <Link href="/" className="flex items-center gap-2 shrink-0">
-          <div className="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center">
+          <div className="w-8 h-8 bg-gray-900 rounded-lg flex items-center justify-center">
             <Scale className="w-4 h-4 text-white" />
           </div>
           <div className="flex flex-col leading-tight">
             <span className="font-bold text-base text-gray-900">오수진 변호사</span>
-            <span className="text-[10px] text-indigo-600 font-medium -mt-0.5">이혼전문변호사</span>
+            <span className="text-[10px] text-gray-500 font-medium -mt-0.5">이혼전문변호사</span>
           </div>
         </Link>
 
@@ -39,7 +39,7 @@ export function Header() {
               className={cn(
                 'px-3 py-2 rounded-lg text-sm font-medium transition-colors',
                 pathname === item.href
-                  ? 'bg-indigo-50 text-indigo-700'
+                  ? 'bg-gray-100 text-gray-900'
                   : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
               )}
             >

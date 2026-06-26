@@ -13,10 +13,10 @@ export function PrivacyConsent({ agreed, onToggle }: PrivacyConsentProps) {
           type="checkbox"
           checked={agreed}
           onChange={(e) => onToggle(e.target.checked)}
-          className="mt-1 w-4 h-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+          className="mt-1 w-4 h-4 rounded border-gray-300 text-gray-900 focus:ring-gray-500"
         />
         <span className="text-sm text-gray-700">
-          <span className="font-medium text-red-500">[필수]</span> 개인정보 수집 및 이용에 동의합니다.
+          <span className="font-medium text-gray-900">[필수]</span> 개인정보 수집 및 이용에 동의합니다.
         </span>
       </label>
       <div className="bg-gray-50 rounded-lg p-3 text-xs text-gray-500 leading-relaxed">

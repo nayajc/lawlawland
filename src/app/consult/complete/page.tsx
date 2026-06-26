@@ -10,8 +10,8 @@ export const metadata: Metadata = {
 export default function ConsultCompletePage() {
   return (
     <div className="max-w-lg mx-auto px-4 py-20 text-center">
-      <div className="w-20 h-20 bg-green-50 rounded-full flex items-center justify-center mx-auto mb-6">
-        <CheckCircle className="w-10 h-10 text-green-500" />
+      <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
+        <CheckCircle className="w-10 h-10 text-gray-700" />
       </div>
       <h1 className="text-2xl font-bold text-gray-900 mb-2">상담 요청이 완료되었습니다</h1>
       <p className="text-gray-500 mb-2">
@@ -25,7 +25,7 @@ export default function ConsultCompletePage() {
           <Button variant="outline">홈으로 돌아가기</Button>
         </Link>
         <Link href="/chat">
-          <Button className="bg-indigo-600 hover:bg-indigo-700">AI 상담 계속하기</Button>
+          <Button className="bg-gray-900 hover:bg-gray-800">AI 상담 계속하기</Button>
         </Link>
       </div>
     </div>

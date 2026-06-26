@@ -9,7 +9,7 @@ const renderOptions = {
     [MARKS.ITALIC]: (text: any) => <em className="italic">{text}</em>,
     [MARKS.UNDERLINE]: (text: any) => <u className="underline">{text}</u>,
     [MARKS.CODE]: (text: any) => (
-      <code className="bg-gray-100 text-indigo-600 px-2 py-1 rounded text-sm font-mono">
+      <code className="bg-gray-100 text-gray-800 px-2 py-1 rounded text-sm font-mono">
         {text}
       </code>
     ),
@@ -46,7 +46,7 @@ const renderOptions = {
       <li className="text-gray-700 [&>p]:mb-0 [&>p]:mt-0">{children}</li>
     ),
     [BLOCKS.QUOTE]: (_node: any, children: any) => (
-      <blockquote className="border-l-4 border-indigo-500 pl-4 italic text-gray-600 my-6">
+      <blockquote className="border-l-4 border-gray-400 pl-4 italic text-gray-600 my-6">
         {children}
       </blockquote>
     ),
@@ -77,7 +77,7 @@ const renderOptions = {
         href={node.data.uri}
         target="_blank"
         rel="noopener noreferrer"
-        className="text-indigo-600 hover:text-indigo-700 underline"
+        className="text-gray-900 hover:text-gray-600 underline"
       >
         {children}
       </a>
@@ -90,5 +90,5 @@ interface RichTextRendererProps {
 }
 
 export function RichTextRenderer({ content }: RichTextRendererProps) {
-  return <div className="prose max-w-none">{documentToReactComponents(content, renderOptions)}</div>;
+  return <div className="prose max-w-none prose-a:text-gray-900 prose-a:no-underline hover:prose-a:underline prose-blockquote:border-gray-400">{documentToReactComponents(content, renderOptions)}</div>;
 }

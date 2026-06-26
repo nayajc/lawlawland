@@ -25,7 +25,7 @@ export function ChildSupportCalc() {
           <div className="space-y-3">
             <div className="flex items-center justify-between">
               <Label className="text-sm font-medium text-gray-700">부(아버지) 월 소득</Label>
-              <span className="text-sm font-bold text-indigo-600">{fatherIncome}만원</span>
+              <span className="text-sm font-bold text-gray-900">{fatherIncome}만원</span>
             </div>
             <Slider
               value={[fatherIncome]}
@@ -47,7 +47,7 @@ export function ChildSupportCalc() {
           <div className="space-y-3">
             <div className="flex items-center justify-between">
               <Label className="text-sm font-medium text-gray-700">모(어머니) 월 소득</Label>
-              <span className="text-sm font-bold text-indigo-600">{motherIncome}만원</span>
+              <span className="text-sm font-bold text-gray-900">{motherIncome}만원</span>
             </div>
             <Slider
               value={[motherIncome]}
@@ -76,7 +76,7 @@ export function ChildSupportCalc() {
                   className={cn(
                     'cursor-pointer px-4 py-2 text-sm',
                     childrenCount === n
-                      ? 'bg-indigo-600 hover:bg-indigo-700'
+                      ? 'bg-gray-900 hover:bg-gray-800'
                       : 'hover:bg-gray-50'
                   )}
                   onClick={() => setChildrenCount(n)}
@@ -98,7 +98,7 @@ export function ChildSupportCalc() {
                   className={cn(
                     'cursor-pointer px-3 py-2 text-xs justify-center',
                     childAge === opt.value
-                      ? 'bg-indigo-600 hover:bg-indigo-700'
+                      ? 'bg-gray-900 hover:bg-gray-800'
                       : 'hover:bg-gray-50'
                   )}
                   onClick={() => setChildAge(opt.value)}

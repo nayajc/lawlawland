@@ -7,14 +7,14 @@ export function TrustIndicators() {
       <div className="bg-gray-50 rounded-2xl p-6 md:p-8">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div className="flex items-start gap-3">
-            <AlertTriangle className="w-5 h-5 text-amber-500 shrink-0 mt-0.5" />
+            <AlertTriangle className="w-5 h-5 text-gray-500 shrink-0 mt-0.5" />
             <div>
               <p className="text-sm font-medium text-gray-800 mb-1">법률 정보 안내</p>
               <p className="text-xs text-gray-500 leading-relaxed">{DISCLAIMER_TEXT}</p>
             </div>
           </div>
           <div className="flex items-start gap-3">
-            <Lock className="w-5 h-5 text-indigo-500 shrink-0 mt-0.5" />
+            <Lock className="w-5 h-5 text-gray-600 shrink-0 mt-0.5" />
             <div>
               <p className="text-sm font-medium text-gray-800 mb-1">개인정보 보호</p>
               <p className="text-xs text-gray-500 leading-relaxed">
@@ -23,7 +23,7 @@ export function TrustIndicators() {
             </div>
           </div>
           <div className="flex items-start gap-3">
-            <Shield className="w-5 h-5 text-emerald-500 shrink-0 mt-0.5" />
+            <Shield className="w-5 h-5 text-gray-600 shrink-0 mt-0.5" />
             <div>
               <p className="text-sm font-medium text-gray-800 mb-1">오수진 변호사 직접 상담</p>
               <p className="text-xs text-gray-500 leading-relaxed">

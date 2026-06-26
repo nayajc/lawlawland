@@ -29,11 +29,11 @@ export function BlogPostCard({ post }: BlogPostCardProps) {
         )}
         <div className="p-6">
           {post.category && (
-            <span className="inline-block px-3 py-1 text-xs font-medium bg-indigo-50 text-indigo-600 rounded-full mb-3">
+            <span className="inline-block px-3 py-1 text-xs font-medium bg-gray-100 text-gray-600 rounded-full mb-3">
               {post.category}
             </span>
           )}
-          <h2 className="text-xl font-bold text-gray-900 mb-2 group-hover:text-indigo-600 transition-colors line-clamp-2">
+          <h2 className="text-xl font-bold text-gray-900 mb-2 group-hover:text-gray-600 transition-colors line-clamp-2">
             {post.title}
           </h2>
           <p className="text-gray-600 text-sm mb-4 line-clamp-3">{post.excerpt}</p>

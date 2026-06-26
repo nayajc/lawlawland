@@ -15,7 +15,7 @@ export default function NotFound() {
       </p>
       <Link
         href="/blog"
-        className="inline-block px-6 py-3 bg-indigo-600 text-white font-medium rounded-lg hover:bg-indigo-700 transition-colors"
+        className="inline-block px-6 py-3 bg-gray-900 text-white font-medium rounded-lg hover:bg-gray-800 transition-colors"
       >
         블로그 목록으로 돌아가기
       </Link>

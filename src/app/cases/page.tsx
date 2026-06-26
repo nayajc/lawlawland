@@ -14,15 +14,15 @@ interface CasePost {
 }
 
 const CATEGORY_COLORS: Record<string, string> = {
-  '가사': 'bg-rose-50 text-rose-700 border-rose-200',
-  '가사조정': 'bg-rose-50 text-rose-700 border-rose-200',
-  '민사': 'bg-blue-50 text-blue-700 border-blue-200',
-  '민사보전': 'bg-sky-50 text-sky-700 border-sky-200',
-  '행정': 'bg-amber-50 text-amber-700 border-amber-200',
-  '집행': 'bg-purple-50 text-purple-700 border-purple-200',
-  '형사': 'bg-red-50 text-red-700 border-red-200',
-  '소송비용': 'bg-gray-50 text-gray-700 border-gray-200',
-  '기타': 'bg-gray-50 text-gray-700 border-gray-200',
+  '가사': 'bg-gray-100 text-gray-700 border-gray-300',
+  '가사조정': 'bg-gray-100 text-gray-700 border-gray-300',
+  '민사': 'bg-gray-200 text-gray-800 border-gray-300',
+  '민사보전': 'bg-gray-100 text-gray-700 border-gray-300',
+  '행정': 'bg-gray-50 text-gray-600 border-gray-200',
+  '집행': 'bg-gray-200 text-gray-800 border-gray-300',
+  '형사': 'bg-gray-900 text-white border-gray-900',
+  '소송비용': 'bg-gray-50 text-gray-600 border-gray-200',
+  '기타': 'bg-gray-50 text-gray-600 border-gray-200',
 };
 
 export default function CasesPage() {
@@ -71,7 +71,7 @@ export default function CasesPage() {
         <h1 className="text-2xl font-bold text-gray-900">주요 승소사례</h1>
         <p className="text-sm text-gray-500 mt-1">
           오수진 변호사의 주요 승소 판결 사례입니다.
-          {totalCount > 0 && <span className="ml-1 text-indigo-600 font-medium">총 {totalCount}건</span>}
+          {totalCount > 0 && <span className="ml-1 text-gray-900 font-medium">총 {totalCount}건</span>}
         </p>
       </div>
 
@@ -99,7 +99,7 @@ export default function CasesPage() {
                   href={selectedPost.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-gray-400 hover:text-indigo-600 transition-colors"
+                  className="text-gray-400 hover:text-gray-900 transition-colors"
                   title="새 탭에서 열기"
                 >
                   <ExternalLink className="w-4 h-4" />
@@ -126,7 +126,7 @@ export default function CasesPage() {
             {posts.map((post) => (
               <Card
                 key={post.id}
-                className="p-4 border-gray-100 hover:shadow-md hover:border-indigo-100 transition-all cursor-pointer"
+                className="p-4 border-gray-100 hover:shadow-md hover:border-gray-300 transition-all cursor-pointer"
                 onClick={() => {
                   // 모바일에서는 iframe이 차단되므로 새 탭으로 열기
                   if (window.innerWidth < 768) {

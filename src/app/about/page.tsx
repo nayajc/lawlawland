@@ -72,7 +72,7 @@ export default function AboutPage() {
   return (
     <div className="max-w-3xl mx-auto px-4 py-8">
       <div className="mb-8">
-        <div className="inline-flex items-center gap-1.5 bg-indigo-50 border border-indigo-100 rounded-full px-3 py-1 text-xs text-indigo-600 font-medium mb-3">
+        <div className="inline-flex items-center gap-1.5 bg-gray-100 border border-gray-200 rounded-full px-3 py-1 text-xs text-gray-700 font-medium mb-3">
           <BookOpen className="w-3 h-3" />
           법무법인 큐브 서울사무소
         </div>
@@ -86,16 +86,16 @@ export default function AboutPage() {
         {sections.map((section) => (
           <Card key={section.title} className="p-6 border-gray-100">
             <div className="flex items-center gap-2 mb-4">
-              <div className="w-8 h-8 rounded-lg bg-indigo-50 flex items-center justify-center">
-                <section.icon className="w-4 h-4 text-indigo-600" />
+              <div className="w-8 h-8 rounded-lg bg-gray-100 flex items-center justify-center">
+                <section.icon className="w-4 h-4 text-gray-700" />
               </div>
               <h2 className="text-lg font-bold text-gray-900">{section.title}</h2>
             </div>
             <ul className="space-y-2.5">
               {section.items.map((item, i) => (
                 <li key={i} className="flex items-start gap-2 text-sm text-gray-700">
-                  <span className="text-indigo-400 mt-0.5 shrink-0">&#8226;</span>
-                  <span className={section.highlight === i ? 'font-semibold text-indigo-700' : ''}>
+                  <span className="text-gray-400 mt-0.5 shrink-0">&#8226;</span>
+                  <span className={section.highlight === i ? 'font-semibold text-gray-900' : ''}>
                     {item}
                   </span>
                 </li>

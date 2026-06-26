@@ -72,7 +72,7 @@ export function ContactForm() {
       <form onSubmit={handleSubmit} className="space-y-5">
         <div className="space-y-2">
           <Label htmlFor="name" className="text-sm font-medium">
-            이름 <span className="text-red-500">*</span>
+            이름 <span className="text-gray-900 font-bold">*</span>
           </Label>
           <Input
             id="name"
@@ -85,7 +85,7 @@ export function ContactForm() {
 
         <div className="space-y-2">
           <Label htmlFor="phone" className="text-sm font-medium">
-            전화번호 <span className="text-red-500">*</span>
+            전화번호 <span className="text-gray-900 font-bold">*</span>
           </Label>
           <Input
             id="phone"
@@ -124,12 +124,12 @@ export function ContactForm() {
 
         <PrivacyConsent agreed={privacyAgreed} onToggle={setPrivacyAgreed} />
 
-        {error && <p className="text-sm text-red-500">{error}</p>}
+        {error && <p className="text-sm text-gray-700 font-medium">{error}</p>}
 
         <Button
           type="submit"
           disabled={isSubmitting}
-          className="w-full bg-indigo-600 hover:bg-indigo-700 h-12 text-base font-medium"
+          className="w-full bg-gray-900 hover:bg-gray-800 h-12 text-base font-medium"
         >
           {isSubmitting ? (
             <>

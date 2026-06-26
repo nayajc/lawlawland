@@ -21,15 +21,15 @@ export function ChatSummary() {
   const summary = getSummaryForConsult();
 
   return (
-    <Card className="p-4 bg-indigo-50/50 border-indigo-100">
+    <Card className="p-4 bg-gray-50 border-gray-200">
       <div className="flex items-center gap-2 mb-3">
-        <MessageCircle className="w-4 h-4 text-indigo-500" />
+        <MessageCircle className="w-4 h-4 text-gray-500" />
         <h3 className="text-sm font-semibold text-gray-800">AI 상담 요약 미리보기</h3>
       </div>
       <p className="text-xs text-gray-500 mb-2">
         아래 내용이 변호사에게 전달됩니다.
       </p>
-      <div className="bg-white rounded-lg p-3 border border-indigo-100 max-h-48 overflow-y-auto">
+      <div className="bg-white rounded-lg p-3 border border-gray-200 max-h-48 overflow-y-auto">
         <pre className="text-xs text-gray-700 whitespace-pre-wrap font-sans leading-relaxed">
           {summary}
         </pre>

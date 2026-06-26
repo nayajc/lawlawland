@@ -20,7 +20,7 @@ export function CategorySelector({ selected, onSelect }: CategorySelectorProps) 
           className={cn(
             'cursor-pointer whitespace-nowrap px-3 py-1.5 text-xs font-medium transition-all shrink-0',
             selected === cat.id
-              ? 'bg-indigo-600 hover:bg-indigo-700 text-white border-indigo-600'
+              ? 'bg-gray-900 hover:bg-gray-800 text-white border-gray-900'
               : 'bg-white hover:bg-gray-50 text-gray-600 border-gray-200'
           )}
           onClick={() => onSelect(cat.id)}

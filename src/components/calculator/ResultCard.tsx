@@ -12,20 +12,20 @@ interface ResultCardProps {
 
 export function ResultCard({ result }: ResultCardProps) {
   return (
-    <Card className="p-6 bg-gradient-to-br from-indigo-50 to-white border-indigo-100 shadow-sm">
-      <h3 className="text-sm font-semibold text-indigo-900 mb-4">예상 양육비</h3>
+    <Card className="p-6 bg-gradient-to-br from-gray-50 to-white border-gray-200 shadow-sm">
+      <h3 className="text-sm font-semibold text-gray-900 mb-4">예상 양육비</h3>
       <div className="text-center mb-4">
-        <p className="text-3xl font-bold text-indigo-600">
+        <p className="text-3xl font-bold text-gray-900">
           {result.estimatedMin}만원 ~ {result.estimatedMax}만원
         </p>
         <p className="text-xs text-gray-500 mt-1">월 기준</p>
       </div>
       <div className="space-y-2 text-sm">
-        <div className="flex justify-between py-1.5 border-b border-indigo-50">
+        <div className="flex justify-between py-1.5 border-b border-gray-100">
           <span className="text-gray-600">부모 합산 소득</span>
           <span className="font-medium">{result.totalIncome}만원/월</span>
         </div>
-        <div className="flex justify-between py-1.5 border-b border-indigo-50">
+        <div className="flex justify-between py-1.5 border-b border-gray-100">
           <span className="text-gray-600">자녀 1인당 예상</span>
           <span className="font-medium">{result.perChild}만원/월</span>
         </div>

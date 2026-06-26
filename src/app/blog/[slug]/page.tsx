@@ -56,7 +56,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
     <div className="max-w-4xl mx-auto px-4 py-12">
       <Link
         href="/blog"
-        className="inline-flex items-center gap-2 text-indigo-600 hover:text-indigo-700 mb-8 transition-colors"
+        className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-900 mb-8 transition-colors"
       >
         <ArrowLeft className="w-4 h-4" />
         블로그 목록으로 돌아가기
@@ -78,7 +78,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
 
         <header className="mb-8">
           {post.category && (
-            <span className="inline-block px-3 py-1 text-sm font-medium bg-indigo-50 text-indigo-600 rounded-full mb-4">
+            <span className="inline-block px-3 py-1 text-sm font-medium bg-gray-100 text-gray-700 rounded-full mb-4">
               {post.category}
             </span>
           )}
@@ -110,7 +110,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
       <div className="mt-12 pt-8 border-t border-gray-200">
         <Link
           href="/blog"
-          className="inline-flex items-center gap-2 text-indigo-600 hover:text-indigo-700 transition-colors"
+          className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors"
         >
           <ArrowLeft className="w-4 h-4" />
           블로그 목록으로 돌아가기
