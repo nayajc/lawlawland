@@ -125,6 +125,12 @@
   }
   body {
     @apply bg-background text-foreground;
-    @apply bg-background text-foreground;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+  /* 본문 가독성: 정서적으로 지친 사용자·중장년층 비중을 고려해 행간을 넉넉히 */
+  p {
+    line-height: 1.75;
   }
 }

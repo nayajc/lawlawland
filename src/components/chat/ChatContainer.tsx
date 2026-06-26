@@ -10,6 +10,7 @@ import { ChatInput } from './ChatInput';
 import { ConsultCTA } from './ConsultCTA';
 import { DisclaimerBanner } from './DisclaimerBanner';
 import { MessageCircle } from 'lucide-react';
+import { EXAMPLE_QUESTIONS } from '@/lib/constants';
 import type { ChatMessage } from '@/types';
 
 export function ChatContainer() {
@@ -69,17 +70,34 @@ export function ChatContainer() {
         <div className="max-w-3xl mx-auto space-y-4">
           {messages.length === 0 && (
             <div className="flex flex-col items-center justify-center h-full text-center py-20">
-              <div className="w-16 h-16 bg-indigo-50 rounded-2xl flex items-center justify-center mb-4">
-                <MessageCircle className="w-8 h-8 text-indigo-400" />
+              <div className="w-16 h-16 bg-gray-100 rounded-2xl flex items-center justify-center mb-4">
+                <MessageCircle className="w-8 h-8 text-gray-400" />
               </div>
               <h2 className="text-xl md:text-2xl font-bold text-gray-800 mb-3">
                 안녕하세요, 오수진 변호사 AI 상담입니다
               </h2>
-              <p className="text-sm md:text-base text-gray-500 max-w-sm leading-relaxed">
+              <p className="text-sm md:text-base text-gray-600 max-w-sm leading-relaxed">
                 이혼 관련 법률 정보가 궁금하시면 편하게 질문해주세요.
                 <br />
                 위 카테고리를 선택하면 더 정확한 안내를 받으실 수 있습니다.
               </p>
+
+              {/* 예시 질문 칩 — 진입장벽 완화 */}
+              <div className="mt-8 w-full max-w-md">
+                <p className="text-xs text-gray-400 mb-3">이런 질문을 많이 하세요</p>
+                <div className="flex flex-wrap justify-center gap-2">
+                  {EXAMPLE_QUESTIONS.map((q) => (
+                    <button
+                      key={q}
+                      type="button"
+                      onClick={() => handleSend(q)}
+                      className="rounded-full border border-gray-200 bg-white px-3.5 py-2 text-xs md:text-sm text-gray-700 transition-colors hover:border-gray-400 hover:bg-gray-50"
+                    >
+                      {q}
+                    </button>
+                  ))}
+                </div>
+              </div>
             </div>
           )}
           {messages.map((msg, idx) => (

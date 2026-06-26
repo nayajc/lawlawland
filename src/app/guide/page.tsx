@@ -1,6 +1,5 @@
-import { Card } from '@/components/ui/card';
 import Link from 'next/link';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, ChevronDown } from 'lucide-react';
 import { DISCLAIMER_TEXT } from '@/lib/constants';
 import type { Metadata } from 'next';
 
@@ -54,32 +53,41 @@ export default function GuidePage() {
     <div className="max-w-3xl mx-auto px-4 py-8">
       <div className="mb-8">
         <h1 className="text-2xl font-bold text-gray-900">이혼 가이드</h1>
-        <p className="text-sm text-gray-500 mt-1">
-          이혼 관련 기본적인 법률 정보를 한눈에 확인하세요.
+        <p className="text-base text-gray-600 mt-1 leading-relaxed">
+          이혼 관련 기본적인 법률 정보를 한눈에 확인하세요. 항목을 눌러 자세한 내용을 펼쳐보세요.
         </p>
       </div>
 
-      <div className="space-y-4">
+      <div className="space-y-3">
         {guides.map((guide, idx) => (
-          <Card key={idx} className="p-6 border-gray-100">
-            <h2 className="text-lg font-semibold text-gray-900 mb-1">{guide.title}</h2>
-            <p className="text-sm text-gray-500 mb-4">{guide.description}</p>
-            <ul className="space-y-2">
+          <details
+            key={idx}
+            open={idx === 0}
+            className="group rounded-xl border border-gray-200 bg-white open:shadow-sm"
+          >
+            <summary className="flex cursor-pointer items-center justify-between gap-4 p-5 list-none [&::-webkit-details-marker]:hidden">
+              <div>
+                <h2 className="text-lg font-semibold text-gray-900">{guide.title}</h2>
+                <p className="text-sm text-gray-600 mt-0.5">{guide.description}</p>
+              </div>
+              <ChevronDown className="w-5 h-5 shrink-0 text-gray-400 transition-transform group-open:rotate-180" />
+            </summary>
+            <ul className="space-y-2.5 px-5 pb-5 pt-1 border-t border-gray-100">
               {guide.items.map((item, i) => (
-                <li key={i} className="flex items-start gap-2 text-sm text-gray-700">
-                  <span className="text-indigo-400 mt-1">&#8226;</span>
+                <li key={i} className="flex items-start gap-2.5 text-[15px] text-gray-700 leading-relaxed">
+                  <span className="text-gray-400 mt-1.5 text-xs">&#9679;</span>
                   {item}
                 </li>
               ))}
             </ul>
-          </Card>
+          </details>
         ))}
       </div>
 
       <div className="mt-8 text-center">
         <Link
           href="/chat"
-          className="inline-flex items-center gap-2 text-indigo-600 font-medium text-sm hover:text-indigo-700"
+          className="inline-flex items-center gap-2 text-gray-900 font-medium text-sm hover:text-gray-600"
         >
           더 자세한 내용은 AI 상담에서 질문해보세요
           <ArrowRight className="w-4 h-4" />
