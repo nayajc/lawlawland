@@ -11,8 +11,8 @@ export function BookingWidget() {
         <h2 className="text-lg font-semibold text-gray-900">상담 시간 예약</h2>
       </div>
       <p className="text-sm text-gray-600 mb-4 leading-relaxed">
-        원하시는 날짜와 시간을 선택해 바로 예약하세요. 예약 내용은 오수진 변호사의 일정에
-        자동으로 등록됩니다.
+        원하시는 날짜와 시간을 선택해 예약하세요. 예약 신청 후 오수진 변호사의 일정 확인을
+        거쳐 최종 확정되며, 확정 결과는 별도로 안내해드립니다.
       </p>
       <iframe
         src={BOOKING_URL}
