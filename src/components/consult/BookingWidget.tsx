@@ -12,7 +12,7 @@ export function BookingWidget() {
       </div>
       <p className="text-sm text-gray-600 mb-4 leading-relaxed">
         원하시는 날짜와 시간을 선택해 예약하세요. 예약 신청 후 오수진 변호사의 일정 확인을
-        거쳐 최종 확정되며, 확정 결과는 별도로 안내해드립니다.
+        거쳐 최종 확정되며, 확정 결과는 이메일로 안내해드립니다.
       </p>
       <iframe
         src={BOOKING_URL}
