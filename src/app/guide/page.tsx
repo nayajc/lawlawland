@@ -6,6 +6,7 @@ import type { Metadata } from 'next';
 export const metadata: Metadata = {
   title: '이혼 가이드 - 오수진 변호사',
   description: '이혼 절차, 종류, 준비사항을 한눈에 알아보세요.',
+  alternates: { canonical: '/guide' },
 };
 
 const guides = [

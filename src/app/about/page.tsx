@@ -5,6 +5,7 @@ import type { Metadata } from 'next';
 export const metadata: Metadata = {
   title: '변호사 소개 - 오수진 변호사',
   description: '이혼전문변호사 오수진의 자격, 경력, 전문 분야, 방송 활동을 소개합니다.',
+  alternates: { canonical: '/about' },
 };
 
 const qualifications = [

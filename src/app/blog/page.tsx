@@ -5,6 +5,7 @@ import type { Metadata } from 'next';
 export const metadata: Metadata = {
   title: '블로그 - 오수진 변호사',
   description: '이혼, 가사, 민사 등 다양한 법률 정보와 실무 경험을 공유합니다.',
+  alternates: { canonical: '/blog' },
 };
 
 export const revalidate = 3600; // Revalidate every hour

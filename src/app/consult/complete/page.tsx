@@ -5,6 +5,7 @@ import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: '상담 요청 완료 - 오수진 변호사',
+  robots: { index: false, follow: true },
 };
 
 export default function ConsultCompletePage() {
