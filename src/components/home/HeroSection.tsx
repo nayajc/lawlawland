@@ -13,10 +13,10 @@ export function HeroSection() {
           <div className="shrink-0">
             <div className="rounded-2xl overflow-hidden shadow-lg border-4 border-white">
               <Image
-                src="/lawyer-profile.png"
+                src="/ohsoojin1.png"
                 alt="오수진 변호사"
-                width={280}
-                height={350}
+                width={1080}
+                height={1350}
                 className="w-48 md:w-64 h-auto"
                 priority
               />
