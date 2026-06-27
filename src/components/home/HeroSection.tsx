@@ -75,7 +75,15 @@ export function HeroSection() {
         <div className="mt-10 grid grid-cols-3 gap-4 border-t border-gray-100 pt-8">
           {STATS.map((stat) => (
             <div key={stat.label} className="text-center">
-              <div className="text-xl md:text-2xl font-bold text-gray-900">{stat.value}</div>
+              <div
+                className={
+                  stat.value.length > 6
+                    ? 'text-base md:text-lg font-bold text-gray-900 whitespace-nowrap'
+                    : 'text-xl md:text-2xl font-bold text-gray-900'
+                }
+              >
+                {stat.value}
+              </div>
               <div className="mt-1 text-xs md:text-sm text-gray-600">{stat.label}</div>
             </div>
           ))}

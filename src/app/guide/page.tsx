@@ -50,8 +50,25 @@ const guides = [
 ];
 
 export default function GuidePage() {
+  const faqJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: guides.map((guide) => ({
+      '@type': 'Question',
+      name: guide.title,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: `${guide.description} ${guide.items.join(' ')}`,
+      },
+    })),
+  };
+
   return (
     <div className="max-w-3xl mx-auto px-4 py-8">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+      />
       <div className="mb-8">
         <h1 className="text-2xl font-bold text-gray-900">이혼 가이드</h1>
         <p className="text-base text-gray-600 mt-1 leading-relaxed">

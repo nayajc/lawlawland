@@ -9,8 +9,8 @@ const items = [
   { href: '/about', label: '소개', icon: User },
   { href: '/cases', label: '승소사례', icon: Trophy },
   { href: '/chat', label: 'AI 상담', icon: MessageCircle },
-  { href: '/guide', label: '가이드', icon: BookOpen },
   { href: '/consult', label: '상담 신청', icon: Phone },
+  { href: '/guide', label: '가이드', icon: BookOpen },
 ];
 
 export function MobileNav() {

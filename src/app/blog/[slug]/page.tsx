@@ -30,8 +30,12 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
     description: post.excerpt,
     alternates: { canonical: `/blog/${slug}` },
     openGraph: {
+      type: 'article',
       title: post.title,
       description: post.excerpt,
+      url: `https://ohsoojin.com/blog/${slug}`,
+      publishedTime: post.publishedAt,
+      authors: [post.author],
       images: post.coverImage ? [{ url: post.coverImage.url }] : [],
     },
   };
@@ -53,8 +57,43 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
     day: 'numeric',
   });
 
+  const articleJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BlogPosting',
+    headline: post.title,
+    description: post.excerpt,
+    image: post.coverImage ? post.coverImage.url : 'https://ohsoojin.com/lawyer-profile.png',
+    datePublished: post.publishedAt,
+    dateModified: post.publishedAt,
+    author: {
+      '@type': 'Person',
+      name: post.author || '오수진',
+      jobTitle: '이혼전문변호사',
+      url: 'https://ohsoojin.com/about',
+    },
+    publisher: {
+      '@type': 'Organization',
+      name: '오수진 변호사',
+      logo: {
+        '@type': 'ImageObject',
+        url: 'https://ohsoojin.com/lawyer-profile.png',
+      },
+    },
+    mainEntityOfPage: {
+      '@type': 'WebPage',
+      '@id': `https://ohsoojin.com/blog/${slug}`,
+    },
+    ...(Array.isArray(post.tags) && post.tags.length > 0
+      ? { keywords: post.tags.join(', ') }
+      : {}),
+  };
+
   return (
     <div className="max-w-4xl mx-auto px-4 py-12">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
+      />
       <Link
         href="/blog"
         className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-900 mb-8 transition-colors"
