@@ -6,12 +6,12 @@ import { STATS } from '@/lib/constants';
 
 export function HeroSection() {
   return (
-    <section className="relative overflow-hidden bg-gradient-to-b from-gray-50 via-white to-white">
+    <section className="relative overflow-hidden" style={{ backgroundColor: '#1B2E4B' }}>
       <div className="max-w-5xl mx-auto px-4 pt-12 pb-12">
         <div className="flex flex-col md:flex-row items-center gap-8 md:gap-12">
           {/* Profile Photo */}
           <div className="shrink-0">
-            <div className="rounded-2xl overflow-hidden shadow-lg border-4 border-white">
+            <div className="rounded-2xl overflow-hidden shadow-lg border-4 border-white/20">
               <Image
                 src="/ohsoojin1.png"
                 alt="오수진 변호사"
@@ -25,36 +25,36 @@ export function HeroSection() {
 
           {/* Content */}
           <div className="text-center md:text-left flex-1">
-            <div className="inline-flex items-center gap-1.5 bg-gray-100 border border-gray-200 rounded-full px-3 py-1 text-xs text-gray-700 font-medium mb-4">
+            <div className="inline-flex items-center gap-1.5 border border-white/20 rounded-full px-3 py-1 text-xs font-medium mb-4 tracking-wide uppercase" style={{ color: 'var(--gold-lt)' }}>
               <Award className="w-3 h-3" />
-              이혼전문변호사 | 법무법인 큐브
+              이혼 · 양육권 · 재산분할 전문
             </div>
-            <h1 className="text-3xl md:text-4xl font-bold text-gray-900 leading-tight mb-3">
-              이혼, 혼자 고민하지 마세요
+            <h1 className="text-3xl md:text-4xl font-bold text-white leading-tight mb-3 tracking-tight">
+              가장 힘든 결정 앞에서
               <br />
-              <span className="text-gray-900 underline decoration-2 underline-offset-4">오수진 변호사</span>가 함께합니다
+              <span style={{ color: 'var(--gold-lt)' }}>당신의 편</span>이 되겠습니다
             </h1>
-            <p className="text-base md:text-lg text-gray-600 max-w-md mb-6 leading-[1.8]">
-              고려대 법학전문대학원 박사과정 수료, 다수 방송 법률자문 출연.
-              이혼 소송, 양육권, 재산분할, 위자료 분야에서 풍부한 경험으로 의뢰인의 권익을 지킵니다.
+            <p className="text-base md:text-lg text-white/60 max-w-md mb-6 leading-[1.8]">
+              고려대 법학 박사과정 수료, KBS·SBS·채널A 법률 자문 출연.
+              이혼 소송, 양육권, 재산분할, 위자료 — 10년간 수백 건의 경험이 당신 곁에 있습니다.
             </p>
 
             <div className="flex flex-wrap items-center justify-center md:justify-start gap-3 mb-6">
-              <Link href="/chat">
-                <Button size="lg" className="bg-gray-900 hover:bg-gray-800 h-12 px-6 text-base gap-2">
-                  AI 상담 시작하기
+              <Link href="/consult">
+                <Button size="lg" className="text-white h-12 px-6 text-base gap-2 border-0" style={{ backgroundColor: 'var(--gold)' }}>
+                  상담 신청하기
                   <ArrowRight className="w-4 h-4" />
                 </Button>
               </Link>
-              <Link href="/consult">
-                <Button variant="outline" size="lg" className="h-12 px-6 text-base border-gray-300 hover:bg-gray-50">
-                  상담 신청하기
+              <Link href="/chat">
+                <Button variant="outline" size="lg" className="h-12 px-6 text-base border-white/25 text-white/80 hover:bg-white/10 hover:text-white bg-transparent">
+                  AI 법률 상담 →
                 </Button>
               </Link>
             </div>
 
             {/* Credentials */}
-            <div className="flex flex-wrap items-center justify-center md:justify-start gap-4 text-xs text-gray-500">
+            <div className="flex flex-wrap items-center justify-center md:justify-start gap-4 text-xs text-white/40">
               <span className="flex items-center gap-1">
                 <BookOpen className="w-3.5 h-3.5" />
                 고려대 법학박사과정
@@ -72,19 +72,19 @@ export function HeroSection() {
         </div>
 
         {/* 신뢰 지표 */}
-        <div className="mt-10 grid grid-cols-3 gap-4 border-t border-gray-100 pt-8">
+        <div className="mt-10 grid grid-cols-3 gap-4 border-t border-white/10 pt-8">
           {STATS.map((stat) => (
             <div key={stat.label} className="text-center">
               <div
                 className={
                   stat.value.length > 6
-                    ? 'text-base md:text-lg font-bold text-gray-900 whitespace-nowrap'
-                    : 'text-xl md:text-2xl font-bold text-gray-900'
+                    ? 'text-base md:text-lg font-bold text-white whitespace-nowrap tracking-tight'
+                    : 'text-xl md:text-2xl font-bold text-white tracking-tight'
                 }
               >
                 {stat.value}
               </div>
-              <div className="mt-1 text-xs md:text-sm text-gray-600">{stat.label}</div>
+              <div className="mt-1 text-xs md:text-sm text-white/45">{stat.label}</div>
             </div>
           ))}
         </div>

@@ -1,5 +1,6 @@
 import { Card } from '@/components/ui/card';
 import { Award, Briefcase, Scale, Tv, BookOpen } from 'lucide-react';
+import { PageHeader } from '@/components/layout/PageHeader';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -46,65 +47,44 @@ const broadcasts = [
 ];
 
 const sections = [
-  {
-    title: '자격',
-    icon: Award,
-    items: qualifications,
-  },
-  {
-    title: '경력',
-    icon: Briefcase,
-    items: career.map((c) => c.label),
-    highlight: 0,
-  },
-  {
-    title: '전문 분야 및 활동',
-    icon: Scale,
-    items: expertise,
-  },
-  {
-    title: '방송 활동',
-    icon: Tv,
-    items: broadcasts,
-  },
+  { title: '자격', icon: Award, items: qualifications },
+  { title: '경력', icon: Briefcase, items: career.map((c) => c.label), highlight: 0 },
+  { title: '전문 분야 및 활동', icon: Scale, items: expertise },
+  { title: '방송 활동', icon: Tv, items: broadcasts },
 ];
 
 export default function AboutPage() {
   return (
-    <div className="max-w-3xl mx-auto px-4 py-8">
-      <div className="mb-8">
-        <div className="inline-flex items-center gap-1.5 bg-gray-100 border border-gray-200 rounded-full px-3 py-1 text-xs text-gray-700 font-medium mb-3">
-          <BookOpen className="w-3 h-3" />
-          법무법인 큐브 서울사무소
-        </div>
-        <h1 className="text-2xl font-bold text-gray-900">오수진 변호사 소개</h1>
-        <p className="text-sm text-gray-500 mt-1">
-          고려대 법학전문대학원 박사과정 수료 | 이혼전문변호사
-        </p>
-      </div>
-
-      <div className="space-y-4">
-        {sections.map((section) => (
-          <Card key={section.title} className="p-6 border-gray-100">
-            <div className="flex items-center gap-2 mb-4">
-              <div className="w-8 h-8 rounded-lg bg-gray-100 flex items-center justify-center">
-                <section.icon className="w-4 h-4 text-gray-700" />
+    <>
+      <PageHeader
+        title="오수진 변호사 소개"
+        description="고려대 법학전문대학원 박사과정 수료 | 이혼전문변호사"
+        badge="법무법인 큐브 서울사무소"
+      />
+      <div className="max-w-3xl mx-auto px-4 pb-12">
+        <div className="space-y-4">
+          {sections.map((section) => (
+            <Card key={section.title} className="p-6" style={{ borderColor: '#D4E4F0' }}>
+              <div className="flex items-center gap-2 mb-4">
+                <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ backgroundColor: '#E8F4FD' }}>
+                  <section.icon className="w-4 h-4" style={{ color: '#1B2E4B' }} />
+                </div>
+                <h2 className="text-lg font-bold" style={{ color: '#1B2840' }}>{section.title}</h2>
               </div>
-              <h2 className="text-lg font-bold text-gray-900">{section.title}</h2>
-            </div>
-            <ul className="space-y-2.5">
-              {section.items.map((item, i) => (
-                <li key={i} className="flex items-start gap-2 text-sm text-gray-700">
-                  <span className="text-gray-400 mt-0.5 shrink-0">&#8226;</span>
-                  <span className={section.highlight === i ? 'font-semibold text-gray-900' : ''}>
-                    {item}
-                  </span>
-                </li>
-              ))}
-            </ul>
-          </Card>
-        ))}
+              <ul className="space-y-2.5">
+                {section.items.map((item, i) => (
+                  <li key={i} className="flex items-start gap-2 text-sm" style={{ color: '#1B2840' }}>
+                    <span className="mt-0.5 shrink-0" style={{ color: '#A07840' }}>&#8226;</span>
+                    <span className={(section as { highlight?: number }).highlight === i ? 'font-semibold' : ''}>
+                      {item}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </Card>
+          ))}
+        </div>
       </div>
-    </div>
+    </>
   );
 }

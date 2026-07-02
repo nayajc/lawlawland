@@ -4,7 +4,7 @@ import { DISCLAIMER_TEXT } from '@/lib/constants';
 export function TrustIndicators() {
   return (
     <section className="max-w-5xl mx-auto px-4 pb-16">
-      <div className="bg-gray-50 rounded-2xl p-6 md:p-8">
+      <div className="rounded-2xl p-6 md:p-8" style={{ backgroundColor: '#E8F4FD', border: '1px solid #D4E4F0' }}>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div className="flex items-start gap-3">
             <AlertTriangle className="w-5 h-5 text-gray-500 shrink-0 mt-0.5" />

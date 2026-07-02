@@ -16,17 +16,6 @@ export const metadata: Metadata = {
   description:
     '이혼전문변호사 오수진. 이혼 사유, 재산분할, 위자료, 양육권 등 이혼 관련 법률 정보를 AI 챗봇으로 쉽게 알아보세요. 법무법인 큐브 서울사무소.',
   keywords: ['오수진 변호사', '이혼전문변호사', '이혼', '법률 상담', 'AI 상담', '양육비', '위자료', '재산분할', '양육권', '법무법인 큐브'],
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: {
-      index: true,
-      follow: true,
-      'max-image-preview': 'large',
-      'max-snippet': -1,
-      'max-video-preview': -1,
-    },
-  },
   openGraph: {
     title: '오수진 변호사 - 이혼전문변호사 AI 상담',
     description: '이혼전문변호사 오수진. 이혼 관련 법률 정보를 AI 챗봇으로 쉽게 알아보세요.',
@@ -34,20 +23,11 @@ export const metadata: Metadata = {
     siteName: '오수진 변호사',
     locale: 'ko_KR',
     url: 'https://ohsoojin.com',
-    images: [
-      {
-        url: '/lawyer-profile.png',
-        width: 280,
-        height: 350,
-        alt: '오수진 변호사',
-      },
-    ],
   },
   twitter: {
     card: 'summary',
     title: '오수진 변호사 - 이혼전문변호사 AI 상담',
     description: '이혼전문변호사 오수진. 이혼 관련 법률 정보를 AI 챗봇으로 쉽게 알아보세요.',
-    images: ['/lawyer-profile.png'],
   },
   alternates: {
     canonical: 'https://ohsoojin.com',
@@ -79,7 +59,6 @@ export default function RootLayout({
               name: '오수진',
               jobTitle: '이혼전문변호사',
               url: 'https://ohsoojin.com',
-              image: 'https://ohsoojin.com/lawyer-profile.png',
               description: '이혼전문변호사 오수진. 이혼, 상간위자료, 재산분할, 양육권 소송 전문.',
               memberOf: {
                 '@type': 'LegalService',
@@ -106,7 +85,7 @@ export default function RootLayout({
               '@type': 'Organization',
               name: '오수진 변호사',
               url: 'https://ohsoojin.com',
-              logo: 'https://ohsoojin.com/lawyer-profile.png',
+              logo: 'https://ohsoojin.com/og-image.png',
               description: '이혼 전문 변호사 오수진의 공식 웹사이트',
               sameAs: [
                 'https://www.youtube.com/@ohsoojin',

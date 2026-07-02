@@ -4,6 +4,7 @@ import { useEffect, useState, useCallback } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft, ExternalLink, X, ChevronDown } from 'lucide-react';
+import { PageHeader } from '@/components/layout/PageHeader';
 
 interface CasePost {
   id: string;
@@ -14,15 +15,15 @@ interface CasePost {
 }
 
 const CATEGORY_COLORS: Record<string, string> = {
-  '가사': 'bg-gray-100 text-gray-700 border-gray-300',
-  '가사조정': 'bg-gray-100 text-gray-700 border-gray-300',
-  '민사': 'bg-gray-200 text-gray-800 border-gray-300',
-  '민사보전': 'bg-gray-100 text-gray-700 border-gray-300',
-  '행정': 'bg-gray-50 text-gray-600 border-gray-200',
-  '집행': 'bg-gray-200 text-gray-800 border-gray-300',
-  '형사': 'bg-gray-900 text-white border-gray-900',
-  '소송비용': 'bg-gray-50 text-gray-600 border-gray-200',
-  '기타': 'bg-gray-50 text-gray-600 border-gray-200',
+  '가사': 'bg-[#E8F4FD] text-[#1B2E4B] border-[#D4E4F0]',
+  '가사조정': 'bg-[#E8F4FD] text-[#1B2E4B] border-[#D4E4F0]',
+  '민사': 'bg-[#ddeef9] text-[#1B2840] border-[#c4ddf0]',
+  '민사보전': 'bg-[#E8F4FD] text-[#1B2E4B] border-[#D4E4F0]',
+  '행정': 'bg-[#f0f7fc] text-[#5C6F8A] border-[#D4E4F0]',
+  '집행': 'bg-[#ddeef9] text-[#1B2840] border-[#c4ddf0]',
+  '형사': 'bg-[#1B2E4B] text-white border-[#1B2E4B]',
+  '소송비용': 'bg-[#f0f7fc] text-[#5C6F8A] border-[#D4E4F0]',
+  '기타': 'bg-[#f0f7fc] text-[#5C6F8A] border-[#D4E4F0]',
 };
 
 export default function CasesPage() {
@@ -65,29 +66,27 @@ export default function CasesPage() {
   };
 
   return (
-    <div className="max-w-3xl mx-auto px-4 py-8">
-      {/* Header */}
-      <div className="mb-6">
-        <h1 className="text-2xl font-bold text-gray-900">주요 승소사례</h1>
-        <p className="text-sm text-gray-500 mt-1">
-          오수진 변호사의 주요 승소 판결 사례입니다.
-          {totalCount > 0 && <span className="ml-1 text-gray-900 font-medium">총 {totalCount}건</span>}
-        </p>
-      </div>
+    <>
+      <PageHeader
+        title="주요 승소사례"
+        description={totalCount > 0 ? `오수진 변호사의 주요 승소 판결 사례입니다. 총 ${totalCount}건` : '오수진 변호사의 주요 승소 판결 사례입니다.'}
+      />
+      <div className="max-w-3xl mx-auto px-4 pb-12">
 
       {/* Post List */}
       {selectedPost ? (
         <div>
           <button
             onClick={() => setSelectedPost(null)}
-            className="inline-flex items-center gap-1 text-sm text-gray-500 hover:text-gray-900 mb-4 transition-colors"
+            className="inline-flex items-center gap-1 text-sm mb-4 transition-colors"
+            style={{ color: '#5C6F8A' }}
           >
             <ArrowLeft className="w-4 h-4" />
             목록으로
           </button>
 
-          <Card className="overflow-hidden border-gray-200">
-            <div className="flex items-center justify-between p-4 border-b border-gray-100 bg-gray-50">
+          <Card className="overflow-hidden" style={{ borderColor: '#D4E4F0' }}>
+            <div className="flex items-center justify-between p-4" style={{ borderBottom: '1px solid #D4E4F0', backgroundColor: '#E8F4FD' }}>
               <div className="flex-1 min-w-0">
                 <span className={`inline-block text-[11px] px-2 py-0.5 rounded-full border font-medium mr-2 ${CATEGORY_COLORS[selectedPost.category] || CATEGORY_COLORS['기타']}`}>
                   {selectedPost.category}
@@ -99,14 +98,16 @@ export default function CasesPage() {
                   href={selectedPost.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-gray-400 hover:text-gray-900 transition-colors"
+                  className="transition-colors"
+                  style={{ color: '#5C6F8A' }}
                   title="새 탭에서 열기"
                 >
                   <ExternalLink className="w-4 h-4" />
                 </a>
                 <button
                   onClick={() => setSelectedPost(null)}
-                  className="text-gray-400 hover:text-gray-900 transition-colors"
+                  className="transition-colors"
+                  style={{ color: '#5C6F8A' }}
                 >
                   <X className="w-4 h-4" />
                 </button>
@@ -126,7 +127,8 @@ export default function CasesPage() {
             {posts.map((post) => (
               <Card
                 key={post.id}
-                className="p-4 border-gray-100 hover:shadow-md hover:border-gray-300 transition-all cursor-pointer"
+                className="p-4 hover:shadow-md transition-all cursor-pointer"
+                style={{ borderColor: '#D4E4F0' }}
                 onClick={() => {
                   // 모바일에서는 iframe이 차단되므로 새 탭으로 열기
                   if (window.innerWidth < 768) {
@@ -141,8 +143,8 @@ export default function CasesPage() {
                     {post.category}
                   </span>
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-gray-900 leading-snug">{post.title}</p>
-                    <p className="text-xs text-gray-400 mt-1">{post.date}</p>
+                    <p className="text-sm font-medium leading-snug" style={{ color: '#1B2840' }}>{post.title}</p>
+                    <p className="text-xs mt-1" style={{ color: '#5C6F8A' }}>{post.date}</p>
                   </div>
                 </div>
               </Card>
@@ -150,7 +152,7 @@ export default function CasesPage() {
           </div>
 
           {loading && (
-            <div className="text-center py-8 text-sm text-gray-400">불러오는 중...</div>
+            <div className="text-center py-8 text-sm" style={{ color: '#5C6F8A' }}>불러오는 중...</div>
           )}
 
           {!loading && hasMore && (
@@ -163,6 +165,7 @@ export default function CasesPage() {
           )}
         </>
       )}
-    </div>
+      </div>
+    </>
   );
 }
