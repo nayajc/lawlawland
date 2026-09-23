@@ -12,7 +12,8 @@ const fields = [
   { id: 'category', name: '대분류', type: 'Symbol', required: true, validations: [{ in: [...CASE_CATEGORIES] }] },
   { id: 'originalTag', name: '세부 분류 태그', type: 'Symbol', required: false },
   { id: 'publishedAt', name: '등록일', type: 'Date', required: true },
-  { id: 'summary', name: '사건 요약 (검색 노출용 본문)', type: 'Text', required: false },
+  { id: 'summary', name: '한 줄 요약 (AI검색·메타설명용, 150~220자)', type: 'Text', required: false, validations: [{ size: { max: 400 } }] },
+  { id: 'caseDetail', name: '사건 상세 ([사건][쟁점][결과][의의] 구조)', type: 'Text', required: false },
   {
     id: 'images',
     name: '판결문 이미지',
@@ -49,7 +50,7 @@ async function main() {
   // 편집 화면 UI: 요약은 여러 줄 텍스트, 분류는 드롭다운, slug는 제목 연동
   const editor = await cma.editorInterface.get(id);
   editor.controls = editor.controls?.map((c) => {
-    if (c.fieldId === 'summary') return { ...c, widgetId: 'multipleLine', widgetNamespace: 'builtin' as const };
+    if (c.fieldId === 'summary' || c.fieldId === 'caseDetail') return { ...c, widgetId: 'multipleLine', widgetNamespace: 'builtin' as const };
     if (c.fieldId === 'category') return { ...c, widgetId: 'dropdown', widgetNamespace: 'builtin' as const };
     if (c.fieldId === 'slug') return { ...c, widgetId: 'slugEditor', widgetNamespace: 'builtin' as const, settings: { trackingFieldId: 'title' } };
     return c;

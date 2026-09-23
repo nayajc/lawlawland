@@ -47,7 +47,26 @@ function mapCase(entry: any): WinCase {
     imageCount: images.length,
     images,
     sourceUrl: f.sourceUrl || undefined,
+    caseDetail: f.caseDetail || undefined,
   };
+}
+
+export type CaseDetailSection = { label: '사건' | '쟁점' | '결과' | '의의' | '내용'; text: string };
+
+/** "[사건] ... [쟁점] ... " 형태의 텍스트를 항목별로 분리. 라벨이 없으면 통째로 '내용' 하나. */
+export function parseCaseDetail(raw: string | undefined): CaseDetailSection[] {
+  if (!raw) return [];
+  const re = /\[(사건|쟁점|결과|의의)\]\s*/g;
+  const out: CaseDetailSection[] = [];
+  let m: RegExpExecArray | null;
+  let last: { label: CaseDetailSection['label']; start: number } | null = null;
+  while ((m = re.exec(raw))) {
+    if (last) out.push({ label: last.label, text: raw.slice(last.start, m.index).trim() });
+    last = { label: m[1] as CaseDetailSection['label'], start: m.index + m[0].length };
+  }
+  if (last) out.push({ label: last.label, text: raw.slice(last.start).trim() });
+  else out.push({ label: '내용', text: raw.trim() });
+  return out.filter((s) => s.text);
 }
 /* eslint-enable @typescript-eslint/no-explicit-any */
 

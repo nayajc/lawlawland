@@ -98,4 +98,6 @@ export interface WinCaseListItem {
 export interface WinCase extends WinCaseListItem {
   images: WinCaseImage[];
   sourceUrl?: string;
+  /** [사건][쟁점][결과][의의] 구조의 상세 텍스트 (원문) */
+  caseDetail?: string;
 }

@@ -4,7 +4,7 @@ import Link from 'next/link';
 import type { Metadata } from 'next';
 import { ArrowLeft, ArrowRight, MessageCircle } from 'lucide-react';
 import { CaseCategoryBadge } from '@/components/cases/CaseCategoryBadge';
-import { getAdjacentWinCases, getAllWinCaseSlugs, getWinCaseBySlug } from '@/lib/contentful/cases';
+import { getAdjacentWinCases, getAllWinCaseSlugs, getWinCaseBySlug, parseCaseDetail } from '@/lib/contentful/cases';
 
 interface CasePageProps {
   params: Promise<{ slug: string }>;
@@ -50,6 +50,7 @@ export default async function CasePage({ params }: CasePageProps) {
   if (!c) notFound();
 
   const { prev, next } = await getAdjacentWinCases(c.caseNumber);
+  const detailSections = parseCaseDetail(c.caseDetail);
   const formattedDate = new Date(c.publishedAt).toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' });
 
   const jsonLd = [
@@ -58,6 +59,7 @@ export default async function CasePage({ params }: CasePageProps) {
       '@type': 'Article',
       headline: c.title,
       description: c.summary ?? `[${c.category}] ${c.title}`,
+      articleBody: c.caseDetail ? detailSections.map((s) => `${s.label}: ${s.text}`).join('\n') : undefined,
       articleSection: c.category,
       keywords: [c.category, c.originalTag, '승소사례', '오수진 변호사'].filter(Boolean).join(', '),
       image: c.images.map((img) => img.url),
@@ -110,11 +112,25 @@ export default async function CasePage({ params }: CasePageProps) {
 
         {c.summary && (
           <section
-            className="rounded-xl border p-5 mb-8 text-[15px] leading-relaxed whitespace-pre-line"
+            className="rounded-xl border p-5 mb-6 text-[15px] leading-relaxed"
             style={{ borderColor: '#D4E4F0', backgroundColor: '#f7fbfe', color: '#1B2840' }}
           >
             <h2 className="text-xs font-semibold tracking-widest uppercase mb-2" style={{ color: '#5C6F8A' }}>사건 요약</h2>
-            {c.summary}
+            <p>{c.summary}</p>
+          </section>
+        )}
+
+        {detailSections.length > 0 && (
+          <section className="mb-8" aria-label="사건 상세">
+            <h2 className="text-xs font-semibold tracking-widest uppercase mb-3" style={{ color: '#5C6F8A' }}>사건 상세</h2>
+            <dl className="rounded-xl border divide-y" style={{ borderColor: '#D4E4F0' }}>
+              {detailSections.map((s) => (
+                <div key={s.label} className="grid grid-cols-[3.5rem_1fr] gap-3 p-4" style={{ borderColor: '#D4E4F0' }}>
+                  <dt className="text-sm font-semibold" style={{ color: '#1B2E4B' }}>{s.label}</dt>
+                  <dd className="text-[15px] leading-relaxed" style={{ color: '#1B2840' }}>{s.text}</dd>
+                </div>
+              ))}
+            </dl>
           </section>
         )}
 
