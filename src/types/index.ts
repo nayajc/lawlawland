@@ -73,3 +73,29 @@ export interface BlogPostListItem {
   category?: string;
   tags?: string[];
 }
+
+export type WinCaseCategory = '민사' | '가사' | '보전·집행' | '행정' | '형사' | '기타';
+
+export interface WinCaseImage {
+  url: string;
+  width: number;
+  height: number;
+  title: string;
+  description?: string;
+}
+
+export interface WinCaseListItem {
+  slug: string;
+  caseNumber: number;
+  title: string;
+  category: WinCaseCategory;
+  originalTag?: string;
+  publishedAt: string;
+  imageCount: number;
+  summary?: string;
+}
+
+export interface WinCase extends WinCaseListItem {
+  images: WinCaseImage[];
+  sourceUrl?: string;
+}

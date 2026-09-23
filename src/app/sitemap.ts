@@ -1,5 +1,6 @@
 import type { MetadataRoute } from 'next';
 import { getAllBlogPostSlugs } from '@/lib/contentful/client';
+import { getAllWinCases } from '@/lib/contentful/cases';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = 'https://ohsoojin.com';
@@ -25,5 +26,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.7,
   }));
 
-  return [...staticPages, ...blogPages];
+  // Dynamic win case pages
+  const cases = await getAllWinCases();
+  const casePages: MetadataRoute.Sitemap = cases.map((c) => ({
+    url: `${baseUrl}/cases/${c.slug}`,
+    lastModified: new Date(c.publishedAt),
+    changeFrequency: 'yearly' as const,
+    priority: 0.6,
+  }));
+
+  return [...staticPages, ...blogPages, ...casePages];
 }

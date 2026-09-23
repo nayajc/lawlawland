@@ -1,171 +1,127 @@
-'use client';
-
-import { useEffect, useState, useCallback } from 'react';
-import { Card } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { ArrowLeft, ExternalLink, X, ChevronDown } from 'lucide-react';
+import Link from 'next/link';
+import type { Metadata } from 'next';
+import { ChevronRight, Images } from 'lucide-react';
 import { PageHeader } from '@/components/layout/PageHeader';
+import { CaseCategoryBadge } from '@/components/cases/CaseCategoryBadge';
+import { getAllWinCases, isWinCaseCategory, WIN_CASE_CATEGORIES } from '@/lib/contentful/cases';
 
-interface CasePost {
-  id: string;
-  title: string;
-  category: string;
-  date: string;
-  url: string;
-}
-
-const CATEGORY_COLORS: Record<string, string> = {
-  '가사': 'bg-[#E8F4FD] text-[#1B2E4B] border-[#D4E4F0]',
-  '가사조정': 'bg-[#E8F4FD] text-[#1B2E4B] border-[#D4E4F0]',
-  '민사': 'bg-[#ddeef9] text-[#1B2840] border-[#c4ddf0]',
-  '민사보전': 'bg-[#E8F4FD] text-[#1B2E4B] border-[#D4E4F0]',
-  '행정': 'bg-[#f0f7fc] text-[#5C6F8A] border-[#D4E4F0]',
-  '집행': 'bg-[#ddeef9] text-[#1B2840] border-[#c4ddf0]',
-  '형사': 'bg-[#1B2E4B] text-white border-[#1B2E4B]',
-  '소송비용': 'bg-[#f0f7fc] text-[#5C6F8A] border-[#D4E4F0]',
-  '기타': 'bg-[#f0f7fc] text-[#5C6F8A] border-[#D4E4F0]',
+export const metadata: Metadata = {
+  title: '주요 승소사례 - 오수진 변호사',
+  description: '이혼전문변호사 오수진의 주요 승소 판결 사례. 가사, 민사, 보전·집행, 행정, 형사 등 분야별 판결문과 사건 요약.',
+  alternates: { canonical: '/cases' },
 };
 
-export default function CasesPage() {
-  const [posts, setPosts] = useState<CasePost[]>([]);
-  const [page, setPage] = useState(1);
-  const [totalCount, setTotalCount] = useState(0);
-  const [loading, setLoading] = useState(true);
-  const [hasMore, setHasMore] = useState(true);
-  const [selectedPost, setSelectedPost] = useState<CasePost | null>(null);
+export const revalidate = 3600;
 
-  const fetchPosts = useCallback(async (pageNum: number) => {
-    setLoading(true);
-    try {
-      const res = await fetch(`/api/cases?page=${pageNum}`);
-      if (!res.ok) return;
-      const data = await res.json();
-      if (!data.posts) return;
-      if (pageNum === 1) {
-        setPosts(data.posts);
-      } else {
-        setPosts((prev) => [...prev, ...data.posts]);
-      }
-      setTotalCount(data.totalCount);
-      setHasMore(pageNum < data.totalPages);
-    } catch {
-      // ignore
-    } finally {
-      setLoading(false);
-    }
-  }, []);
+interface CasesPageProps {
+  searchParams: Promise<{ category?: string }>;
+}
 
-  useEffect(() => {
-    fetchPosts(1);
-  }, [fetchPosts]);
+function formatDate(iso: string) {
+  return new Date(iso).toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' });
+}
 
-  const loadMore = () => {
-    const next = page + 1;
-    setPage(next);
-    fetchPosts(next);
+export default async function CasesPage({ searchParams }: CasesPageProps) {
+  const { category } = await searchParams;
+  const selected = isWinCaseCategory(category) ? category : null;
+
+  const all = await getAllWinCases();
+  const counts = new Map<string, number>();
+  for (const c of all) counts.set(c.category, (counts.get(c.category) ?? 0) + 1);
+  const cases = selected ? all.filter((c) => c.category === selected) : all;
+
+  const listJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    name: '오수진 변호사 주요 승소사례',
+    url: 'https://ohsoojin.com/cases',
+    description: metadata.description,
+    mainEntity: {
+      '@type': 'ItemList',
+      numberOfItems: all.length,
+      itemListElement: all.slice(0, 50).map((c, i) => ({
+        '@type': 'ListItem',
+        position: i + 1,
+        url: `https://ohsoojin.com/cases/${c.slug}`,
+        name: c.title,
+      })),
+    },
   };
 
   return (
     <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(listJsonLd) }} />
       <PageHeader
         title="주요 승소사례"
-        description={totalCount > 0 ? `오수진 변호사의 주요 승소 판결 사례입니다. 총 ${totalCount}건` : '오수진 변호사의 주요 승소 판결 사례입니다.'}
+        description={all.length > 0 ? `오수진 변호사의 주요 승소 판결 사례입니다. 총 ${all.length}건` : '오수진 변호사의 주요 승소 판결 사례입니다.'}
       />
       <div className="max-w-3xl mx-auto px-4 pb-12">
-
-      {/* Post List */}
-      {selectedPost ? (
-        <div>
-          <button
-            onClick={() => setSelectedPost(null)}
-            className="inline-flex items-center gap-1 text-sm mb-4 transition-colors"
-            style={{ color: '#5C6F8A' }}
-          >
-            <ArrowLeft className="w-4 h-4" />
-            목록으로
-          </button>
-
-          <Card className="overflow-hidden" style={{ borderColor: '#D4E4F0' }}>
-            <div className="flex items-center justify-between p-4" style={{ borderBottom: '1px solid #D4E4F0', backgroundColor: '#E8F4FD' }}>
-              <div className="flex-1 min-w-0">
-                <span className={`inline-block text-[11px] px-2 py-0.5 rounded-full border font-medium mr-2 ${CATEGORY_COLORS[selectedPost.category] || CATEGORY_COLORS['기타']}`}>
-                  {selectedPost.category}
-                </span>
-                <span className="text-sm font-semibold text-gray-900">{selectedPost.title}</span>
-              </div>
-              <div className="flex items-center gap-2 shrink-0 ml-3">
-                <a
-                  href={selectedPost.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="transition-colors"
-                  style={{ color: '#5C6F8A' }}
-                  title="새 탭에서 열기"
-                >
-                  <ExternalLink className="w-4 h-4" />
-                </a>
-                <button
-                  onClick={() => setSelectedPost(null)}
-                  className="transition-colors"
-                  style={{ color: '#5C6F8A' }}
-                >
-                  <X className="w-4 h-4" />
-                </button>
-              </div>
-            </div>
-            <iframe
-              src={selectedPost.url}
-              className="w-full border-0"
-              style={{ height: 'calc(100vh - 16rem)' }}
-              title={selectedPost.title}
+        {/* 분류 필터 */}
+        <nav aria-label="분류" className="flex flex-wrap gap-2 mb-6">
+          <FilterChip href="/cases" active={!selected} label={`전체 ${all.length}`} />
+          {WIN_CASE_CATEGORIES.filter((cat) => counts.get(cat)).map((cat) => (
+            <FilterChip
+              key={cat}
+              href={`/cases?category=${encodeURIComponent(cat)}`}
+              active={selected === cat}
+              label={`${cat} ${counts.get(cat)}`}
             />
-          </Card>
-        </div>
-      ) : (
-        <>
-          <div className="space-y-2">
-            {posts.map((post) => (
-              <Card
-                key={post.id}
-                className="p-4 hover:shadow-md transition-all cursor-pointer"
-                style={{ borderColor: '#D4E4F0' }}
-                onClick={() => {
-                  // 모바일에서는 iframe이 차단되므로 새 탭으로 열기
-                  if (window.innerWidth < 768) {
-                    window.open(post.url, '_blank');
-                  } else {
-                    setSelectedPost(post);
-                  }
-                }}
-              >
-                <div className="flex items-start gap-3">
-                  <span className={`inline-block text-[11px] px-2 py-0.5 rounded-full border font-medium shrink-0 mt-0.5 ${CATEGORY_COLORS[post.category] || CATEGORY_COLORS['기타']}`}>
-                    {post.category}
-                  </span>
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium leading-snug" style={{ color: '#1B2840' }}>{post.title}</p>
-                    <p className="text-xs mt-1" style={{ color: '#5C6F8A' }}>{post.date}</p>
-                  </div>
-                </div>
-              </Card>
-            ))}
+          ))}
+        </nav>
+
+        {cases.length === 0 ? (
+          <div className="text-center py-20">
+            <p className="text-lg" style={{ color: '#5C6F8A' }}>등록된 승소사례가 없습니다.</p>
           </div>
-
-          {loading && (
-            <div className="text-center py-8 text-sm" style={{ color: '#5C6F8A' }}>불러오는 중...</div>
-          )}
-
-          {!loading && hasMore && (
-            <div className="text-center mt-6">
-              <Button variant="outline" onClick={loadMore} className="gap-2">
-                더보기
-                <ChevronDown className="w-4 h-4" />
-              </Button>
-            </div>
-          )}
-        </>
-      )}
+        ) : (
+          <ol className="space-y-2">
+            {cases.map((c) => (
+              <li key={c.slug}>
+                <Link
+                  href={`/cases/${c.slug}`}
+                  className="group block rounded-xl border bg-white p-4 hover:shadow-md transition-all"
+                  style={{ borderColor: '#D4E4F0' }}
+                >
+                  <div className="flex items-start gap-3">
+                    <CaseCategoryBadge category={c.category} className="shrink-0 mt-0.5" />
+                    <div className="flex-1 min-w-0">
+                      <h2 className="text-sm font-medium leading-snug" style={{ color: '#1B2840' }}>
+                        {c.title}
+                      </h2>
+                      <p className="flex items-center gap-2 text-xs mt-1" style={{ color: '#5C6F8A' }}>
+                        <time dateTime={c.publishedAt}>{formatDate(c.publishedAt)}</time>
+                        {c.imageCount > 0 && (
+                          <span className="inline-flex items-center gap-0.5">
+                            <Images className="w-3 h-3" aria-hidden />
+                            판결문 {c.imageCount}장
+                          </span>
+                        )}
+                      </p>
+                    </div>
+                    <ChevronRight className="w-4 h-4 shrink-0 mt-1 opacity-40 group-hover:opacity-80 transition-opacity" style={{ color: '#5C6F8A' }} aria-hidden />
+                  </div>
+                </Link>
+              </li>
+            ))}
+          </ol>
+        )}
       </div>
     </>
+  );
+}
+
+function FilterChip({ href, active, label }: { href: string; active: boolean; label: string }) {
+  return (
+    <Link
+      href={href}
+      scroll={false}
+      aria-current={active ? 'page' : undefined}
+      className={`text-xs px-3 py-1.5 rounded-full border transition-colors ${active ? 'font-semibold' : 'hover:bg-[#f0f7fc]'}`}
+      style={active
+        ? { backgroundColor: '#1B2E4B', color: '#fff', borderColor: '#1B2E4B' }
+        : { backgroundColor: '#fff', color: '#5C6F8A', borderColor: '#D4E4F0' }}
+    >
+      {label}
+    </Link>
   );
 }

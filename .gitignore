@@ -39,3 +39,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+.cover-image-cache/
+
+# contentful import state
+scripts/.import-state.json
