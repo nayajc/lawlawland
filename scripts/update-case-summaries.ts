@@ -3,14 +3,14 @@
  *
  *   node --env-file=.env.local node_modules/.bin/tsx scripts/update-case-summaries.ts <input.json> [--only=1,2] [--dry]
  *
- * input.json: [{ "no": 269, "summary": "짧은 요약", "caseDetail": "[사건] ... [쟁점] ... [결과] ... [의의] ..." }, ...]
- *   - summary / caseDetail 중 있는 필드만 갱신합니다. 값이 기존과 같으면 건너뜁니다.
+ * input.json: [{ "no": 269, "summary": "짧은 요약", "caseDetail": "[사건] ...", "slug": "divorce-custody-269" }, ...]
+ *   - summary / caseDetail / slug 중 있는 필드만 갱신합니다. 값이 기존과 같으면 건너뜁니다.
  */
 import fs from 'node:fs';
 import type { EntryProps } from 'contentful-management';
 import { CASE_CONTENT_TYPE_ID, getClient } from './lib/contentful-env';
 
-interface Row { no: number; summary?: string; caseDetail?: string }
+interface Row { no: number; summary?: string; caseDetail?: string; slug?: string }
 
 const CONCURRENCY = 3;
 
@@ -49,7 +49,7 @@ async function main() {
     const no = Number(entry.fields.caseNumber[locale]);
     const row = byNo.get(no)!;
     const changes: string[] = [];
-    for (const key of ['summary', 'caseDetail'] as const) {
+    for (const key of ['summary', 'caseDetail', 'slug'] as const) {
       const val = row[key]?.trim();
       if (!val) continue;
       if (entry.fields[key]?.[locale] === val) continue;

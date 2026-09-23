@@ -116,6 +116,23 @@ export async function getWinCaseBySlug(slug: string): Promise<WinCase | null> {
   }
 }
 
+/** 예전 주소(/cases/case-269) 리다이렉트용: 사례 번호로 현재 slug 조회 */
+export async function getWinCaseSlugByNumber(caseNumber: number): Promise<string | null> {
+  if (!contentfulClient) return null;
+  try {
+    const res = await contentfulClient.getEntries({
+      content_type: CONTENT_TYPE,
+      'fields.caseNumber': caseNumber,
+      select: ['fields.slug'],
+      limit: 1,
+    } as never);
+    const slug = (res.items[0]?.fields as { slug?: string } | undefined)?.slug;
+    return slug ?? null;
+  } catch {
+    return null;
+  }
+}
+
 export async function getAllWinCaseSlugs(): Promise<string[]> {
   const cases = await getAllWinCases();
   return cases.map((c) => c.slug);

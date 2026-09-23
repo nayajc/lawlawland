@@ -1,10 +1,10 @@
-import { notFound } from 'next/navigation';
+import { notFound, permanentRedirect } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
 import type { Metadata } from 'next';
 import { ArrowLeft, ArrowRight, MessageCircle } from 'lucide-react';
 import { CaseCategoryBadge } from '@/components/cases/CaseCategoryBadge';
-import { getAdjacentWinCases, getAllWinCaseSlugs, getWinCaseBySlug, parseCaseDetail } from '@/lib/contentful/cases';
+import { getAdjacentWinCases, getAllWinCaseSlugs, getWinCaseBySlug, getWinCaseSlugByNumber, parseCaseDetail } from '@/lib/contentful/cases';
 
 interface CasePageProps {
   params: Promise<{ slug: string }>;
@@ -47,7 +47,15 @@ export async function generateMetadata({ params }: CasePageProps): Promise<Metad
 export default async function CasePage({ params }: CasePageProps) {
   const { slug } = await params;
   const c = await getWinCaseBySlug(slug);
-  if (!c) notFound();
+  if (!c) {
+    // 예전 주소 /cases/case-269 → 새 slug로 301
+    const legacy = slug.match(/^case-(\d+)$/);
+    if (legacy) {
+      const current = await getWinCaseSlugByNumber(Number(legacy[1]));
+      if (current && current !== slug) permanentRedirect(`/cases/${current}`);
+    }
+    notFound();
+  }
 
   const { prev, next } = await getAdjacentWinCases(c.caseNumber);
   const detailSections = parseCaseDetail(c.caseDetail);
