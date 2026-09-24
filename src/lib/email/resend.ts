@@ -107,3 +107,82 @@ export async function sendConsultationEmail(params: SendConsultEmailParams) {
 
   return data;
 }
+
+// ---------------------------------------------------------------------------
+// AI 상담 대화 내역 자동 전송 (상담 신청 여부와 무관하게 세션 종료 시)
+// ---------------------------------------------------------------------------
+
+export interface ChatTranscriptMessage {
+  role: 'user' | 'assistant';
+  content: string;
+  timestamp?: string;
+}
+
+interface SendChatTranscriptParams {
+  to: string | string[];
+  sessionId: string;
+  category: string;
+  messages: ChatTranscriptMessage[];
+  isUpdate?: boolean;
+  userAgent?: string;
+  referer?: string;
+}
+
+const CATEGORY_LABELS: Record<string, string> = {
+  general: '일반 상담',
+  'divorce-reason': '이혼 사유',
+  property: '재산분할',
+  alimony: '위자료',
+  custody: '양육권',
+  'parental-authority': '친권',
+  'name-change': '성 변경',
+  procedure: '이혼 절차',
+};
+
+function escapeHtml(s: string): string {
+  return s.replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c] as string);
+}
+
+export async function sendChatTranscriptEmail(params: SendChatTranscriptParams) {
+  const { to, sessionId, category, messages, isUpdate, userAgent, referer } = params;
+  const categoryLabel = CATEGORY_LABELS[category] || '일반 상담';
+  const date = new Date().toLocaleString('ko-KR', { timeZone: 'Asia/Seoul' });
+  const userCount = messages.filter((m) => m.role === 'user').length;
+  const firstQuestion = messages.find((m) => m.role === 'user')?.content.replace(/\s+/g, ' ').slice(0, 40) ?? '';
+
+  const bubbles = messages
+    .map((m) => {
+      const isUser = m.role === 'user';
+      const time = m.timestamp ? new Date(m.timestamp).toLocaleTimeString('ko-KR', { timeZone: 'Asia/Seoul', hour: '2-digit', minute: '2-digit' }) : '';
+      return `
+      <div style="background: ${isUser ? '#E8F4FD' : '#F9FAFB'}; border: 1px solid ${isUser ? '#D4E4F0' : '#E5E7EB'}; border-radius: 8px; padding: 12px 16px; margin-bottom: 12px;">
+        <div style="font-size: 12px; font-weight: 600; color: ${isUser ? '#1B2E4B' : '#6B7280'}; margin-bottom: 6px;">${isUser ? '👤 사용자' : '🤖 AI 상담'} <span style="font-weight: 400; color: #9CA3AF;">${time}</span></div>
+        <div style="font-size: 14px; color: #111827; line-height: 1.6; white-space: pre-wrap;">${escapeHtml(m.content)}</div>
+      </div>`;
+    })
+    .join('');
+
+  const { data, error } = await resend.emails.send({
+    from: '오수진 변호사 AI 상담 <noreply@dalbit.club>',
+    to,
+    subject: `[AI상담 기록${isUpdate ? '·업데이트' : ''}] ${categoryLabel} · 질문 ${userCount}개 · ${firstQuestion}${firstQuestion.length >= 40 ? '…' : ''}`,
+    html: `
+      <div style="font-family: 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif; max-width: 600px; margin: 0 auto; padding: 24px;">
+        <div style="border-bottom: 2px solid #1B2E4B; padding-bottom: 16px; margin-bottom: 20px;">
+          <h1 style="color: #1B2E4B; font-size: 18px; margin: 0;">AI 상담 대화 기록${isUpdate ? ' (업데이트)' : ''}</h1>
+          <p style="color: #6B7280; font-size: 13px; margin: 4px 0 0 0;">${date} · ${categoryLabel} · 사용자 질문 ${userCount}개</p>
+        </div>
+        ${bubbles}
+        <div style="border-top: 1px solid #E5E7EB; padding-top: 12px; color: #9CA3AF; font-size: 11px; line-height: 1.6;">
+          세션 ${escapeHtml(sessionId)}<br/>
+          ${referer ? `유입: ${escapeHtml(referer)}<br/>` : ''}
+          ${userAgent ? `기기: ${escapeHtml(userAgent.slice(0, 120))}<br/>` : ''}
+          상담 신청 폼을 제출하지 않은 세션도 포함해, 채팅 종료 시 자동 발송됩니다.
+        </div>
+      </div>
+    `,
+  });
+
+  if (error) throw new Error(`이메일 발송 실패: ${error.message}`);
+  return data;
+}

@@ -9,6 +9,7 @@ import { TypingIndicator } from './TypingIndicator';
 import { ChatInput } from './ChatInput';
 import { ConsultCTA } from './ConsultCTA';
 import { DisclaimerBanner } from './DisclaimerBanner';
+import { useChatTranscriptReporter } from './useChatTranscriptReporter';
 import { MessageCircle } from 'lucide-react';
 import { EXAMPLE_QUESTIONS } from '@/lib/constants';
 import type { ChatMessage } from '@/types';
@@ -25,6 +26,9 @@ export function ChatContainer() {
     api: '/api/chat',
     body: { category, sessionId },
   });
+
+  // 세션 종료 시 대화 내역을 변호사 측 이메일로 자동 전송
+  useChatTranscriptReporter(storeMessages, category, sessionId);
 
   // Sync assistant messages to store after streaming completes
   useEffect(() => {

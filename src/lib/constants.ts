@@ -11,7 +11,7 @@ export const CATEGORIES: { id: ChatCategory; label: string; icon: string; descri
   { id: 'procedure', label: '이혼 절차', icon: 'ClipboardList', description: '협의이혼, 재판이혼 절차' },
 ];
 
-export const DISCLAIMER_TEXT = '본 정보는 일반적인 법률 정보이며, 개별 사안에 대한 법률 조언이 아닙니다. 구체적인 사안은 전문 변호사 상담을 권해드립니다.';
+export const DISCLAIMER_TEXT = '본 정보는 일반적인 법률 정보이며, 개별 사안에 대한 법률 조언이 아닙니다. 구체적인 사안은 전문 변호사 상담을 권해드립니다. 상담 내용은 변호사 검토와 서비스 개선을 위해 기록될 수 있으니 실명·연락처 등 개인정보는 입력하지 마세요.';
 
 // 신뢰 지표 — TODO: 실제 수치로 교체하세요. 허위·과장 광고는 변호사 광고규정 위반이 될 수 있으니
 // 검증 가능한 값만 사용하세요.
