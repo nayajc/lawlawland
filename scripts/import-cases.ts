@@ -95,9 +95,8 @@ function assetTitle(no: string, seq: string) {
 }
 
 async function downloadImage(url: string): Promise<{ buf: ArrayBuffer; contentType: string }> {
-  const res = await fetch(url, {
-    headers: { 'User-Agent': 'Mozilla/5.0', Referer: 'http://www.xn--6l3bu5ef5an8hvrftsw.com/' },
-  });
+  const referer = url.includes('pstatic.net') ? 'https://blog.naver.com/' : 'http://www.xn--6l3bu5ef5an8hvrftsw.com/';
+  const res = await fetch(url, { headers: { 'User-Agent': 'Mozilla/5.0', Referer: referer } });
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
   const buf = await res.arrayBuffer();
   if (buf.byteLength < 1000) throw new Error(`파일이 너무 작음 (${buf.byteLength}B)`);
