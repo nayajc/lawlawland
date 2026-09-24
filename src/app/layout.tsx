@@ -12,25 +12,32 @@ const geistSans = Geist({
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://ohsoojin.com'),
-  title: '오수진 변호사 - 이혼전문변호사 AI 상담',
-  description:
-    '이혼전문변호사 오수진. 이혼 사유, 재산분할, 위자료, 양육권 등 이혼 관련 법률 정보를 AI 챗봇으로 쉽게 알아보세요. 법무법인 큐브 서울사무소.',
-  keywords: ['오수진 변호사', '이혼전문변호사', '이혼', '법률 상담', 'AI 상담', '양육비', '위자료', '재산분할', '양육권', '법무법인 큐브'],
+  title: '이혼전문변호사 오수진 | 이혼·양육권·재산분할 상담',
+  description: '이혼전문변호사 오수진. 이혼 사유, 재산분할, 위자료, 양육권 상담과 승소사례 269건, 판결문을 확인하세요.',
+  keywords: ['오수진 변호사', '이혼전문변호사', '이혼', '법률 상담', 'AI 상담', '양육비', '위자료', '재산분할', '양육권', '승소사례', '법무법인 큐브'],
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: { index: true, follow: true, 'max-image-preview': 'large', 'max-snippet': -1 },
+  },
   openGraph: {
-    title: '오수진 변호사 - 이혼전문변호사 AI 상담',
-    description: '이혼전문변호사 오수진. 이혼 관련 법률 정보를 AI 챗봇으로 쉽게 알아보세요.',
+    title: '이혼전문변호사 오수진 | 이혼·양육권·재산분할 상담',
+    description: '이혼 사유, 재산분할, 위자료, 양육권 상담과 승소사례 269건, 판결문을 확인하세요.',
     type: 'website',
     siteName: '오수진 변호사',
     locale: 'ko_KR',
     url: 'https://ohsoojin.com',
+    images: [{ url: 'https://ohsoojin.com/og-image.png', width: 1200, height: 630, alt: '이혼전문변호사 오수진' }],
   },
   twitter: {
-    card: 'summary',
-    title: '오수진 변호사 - 이혼전문변호사 AI 상담',
-    description: '이혼전문변호사 오수진. 이혼 관련 법률 정보를 AI 챗봇으로 쉽게 알아보세요.',
+    card: 'summary_large_image',
+    title: '이혼전문변호사 오수진 | 이혼·양육권·재산분할 상담',
+    description: '이혼 사유, 재산분할, 위자료, 양육권 상담과 승소사례 269건, 판결문을 확인하세요.',
+    images: ['https://ohsoojin.com/og-image.png'],
   },
   alternates: {
     canonical: 'https://ohsoojin.com',
+    types: { 'application/rss+xml': 'https://ohsoojin.com/feed' },
   },
   verification: {
     other: {
@@ -47,7 +54,7 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <head>
-        <link rel="alternate" type="application/rss+xml" href="https://ohsoojin.com/feed" title="오수진 변호사 블로그" />
+        <link rel="alternate" type="application/rss+xml" href="https://ohsoojin.com/feed" title="오수진 변호사 블로그·승소사례" />
       </head>
       <body className={`${geistSans.variable} font-sans antialiased bg-gray-50`}>
         <script

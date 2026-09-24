@@ -5,6 +5,7 @@ import type { Metadata } from 'next';
 import { ArrowLeft, ArrowRight, MessageCircle } from 'lucide-react';
 import { CaseCategoryBadge } from '@/components/cases/CaseCategoryBadge';
 import { getAdjacentWinCases, getAllWinCaseSlugs, getWinCaseBySlug, getWinCaseSlugByNumber, parseCaseDetail } from '@/lib/contentful/cases';
+import { DEFAULT_OG_IMAGE, snippetDescription, truncateTitle } from '@/lib/seo';
 
 interface CasePageProps {
   params: Promise<{ slug: string }>;
@@ -25,22 +26,26 @@ export async function generateMetadata({ params }: CasePageProps): Promise<Metad
   const c = await getWinCaseBySlug(slug);
   if (!c) return { title: '승소사례를 찾을 수 없습니다 - 오수진 변호사' };
 
-  const description = c.summary
-    ? c.summary.slice(0, 150)
-    : `[${c.category}] ${c.title} - 이혼전문변호사 오수진의 승소 판결 사례 판결문.`;
+  const description = snippetDescription(
+    c.summary,
+    `[${c.category}] ${c.title} - 이혼전문변호사 오수진의 승소 판결 사례와 판결문.`,
+  );
+  const shortTitle = truncateTitle(c.title, 38);
 
   return {
-    title: `${c.title} - 승소사례 | 오수진 변호사`,
+    title: `${c.category} 승소사례 | ${shortTitle} - 오수진 변호사`,
     description,
     alternates: { canonical: `/cases/${slug}` },
     openGraph: {
       type: 'article',
-      title: c.title,
+      title: `[${c.category} 승소사례] ${c.title}`,
       description,
       url: `${SITE}/cases/${slug}`,
       publishedTime: c.publishedAt,
-      images: c.images[0] ? [{ url: c.images[0].url, width: c.images[0].width, height: c.images[0].height }] : [{ url: `${SITE}/lawyer-profile.png` }],
+      section: c.category,
+      images: [DEFAULT_OG_IMAGE],
     },
+    twitter: { card: 'summary_large_image', title: `[${c.category} 승소사례] ${shortTitle}`, description, images: [DEFAULT_OG_IMAGE.url] },
   };
 }
 

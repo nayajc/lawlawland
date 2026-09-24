@@ -19,7 +19,7 @@ const renderOptions = {
       <p className="mb-4 leading-relaxed text-gray-700">{children}</p>
     ),
     [BLOCKS.HEADING_1]: (_node: any, children: any) => (
-      <h1 className="text-3xl font-bold text-gray-900 mt-8 mb-4">{children}</h1>
+      <h2 className="text-3xl font-bold text-gray-900 mt-8 mb-4">{children}</h2>
     ),
     [BLOCKS.HEADING_2]: (_node: any, children: any) => (
       <h2 className="text-2xl font-bold text-gray-900 mt-8 mb-4">{children}</h2>

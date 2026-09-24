@@ -5,6 +5,7 @@ import { ArrowLeft } from 'lucide-react';
 import { getBlogPostBySlug, getAllBlogPostSlugs } from '@/lib/contentful/client';
 import { RichTextRenderer } from '@/components/blog/RichTextRenderer';
 import type { Metadata } from 'next';
+import { DEFAULT_OG_IMAGE, snippetDescription } from '@/lib/seo';
 
 interface BlogPostPageProps {
   params: Promise<{ slug: string }>;
@@ -25,18 +26,20 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
     };
   }
 
+  const description = snippetDescription(post.excerpt, post.title);
+
   return {
-    title: `${post.title} - 오수진 변호사 블로그`,
-    description: post.excerpt,
+    title: `${post.title} | 오수진 변호사`,
+    description,
     alternates: { canonical: `/blog/${slug}` },
     openGraph: {
       type: 'article',
       title: post.title,
-      description: post.excerpt,
+      description,
       url: `https://ohsoojin.com/blog/${slug}`,
       publishedTime: post.publishedAt,
       authors: [post.author],
-      images: post.coverImage ? [{ url: post.coverImage.url }] : [],
+      images: post.coverImage ? [{ url: post.coverImage.url, alt: post.coverImage.title }] : [DEFAULT_OG_IMAGE],
     },
   };
 }
