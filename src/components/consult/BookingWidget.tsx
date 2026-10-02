@@ -1,7 +1,7 @@
 import { CalendarClock } from 'lucide-react';
 
 const BOOKING_URL =
-  'https://jcalendar-pearl.vercel.app/widget/KbdQVqrQzDf2VnwirTJQuJ1t0zg2';
+  'https://jcalendar-pearl.vercel.app/widget/IaKzS7bwF8b6ZAGSlVhxHwuGzGz2';
 
 export function BookingWidget() {
   return (
