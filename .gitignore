@@ -43,3 +43,6 @@ next-env.d.ts
 
 # contentful import state
 scripts/.import-state.json
+
+# blog cover images (generated)
+scripts/.blog-images/

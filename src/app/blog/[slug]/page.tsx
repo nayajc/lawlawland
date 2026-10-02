@@ -6,6 +6,7 @@ import { getBlogPostBySlug, getAllBlogPostSlugs } from '@/lib/contentful/client'
 import { RichTextRenderer } from '@/components/blog/RichTextRenderer';
 import type { Metadata } from 'next';
 import { DEFAULT_OG_IMAGE, snippetDescription } from '@/lib/seo';
+import { extractFaq } from '@/lib/blog-faq';
 
 interface BlogPostPageProps {
   params: Promise<{ slug: string }>;
@@ -91,12 +92,32 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
       : {}),
   };
 
+  // AI 검색(AIEO)·구글 리치결과용: 본문의 "자주 묻는 질문" 섹션을 FAQPage 구조화 데이터로 노출
+  const faq = extractFaq(post.content);
+  const faqJsonLd = faq.length > 0
+    ? {
+        '@context': 'https://schema.org',
+        '@type': 'FAQPage',
+        mainEntity: faq.map(({ question, answer }) => ({
+          '@type': 'Question',
+          name: question,
+          acceptedAnswer: { '@type': 'Answer', text: answer },
+        })),
+      }
+    : null;
+
   return (
     <div className="max-w-4xl mx-auto px-4 py-12">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
       />
+      {faqJsonLd && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+        />
+      )}
       <Link
         href="/blog"
         className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-900 mb-8 transition-colors"

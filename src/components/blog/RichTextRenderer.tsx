@@ -72,16 +72,20 @@ const renderOptions = {
         </div>
       );
     },
-    [INLINES.HYPERLINK]: (node: any, children: any) => (
-      <a
-        href={node.data.uri}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="text-gray-900 hover:text-gray-600 underline"
-      >
-        {children}
-      </a>
-    ),
+    [INLINES.HYPERLINK]: (node: any, children: any) => {
+      const uri: string = node.data.uri;
+      // 사이트 내부 링크는 같은 탭에서 열어 내부 링크 구조(SEO)와 UX를 유지한다.
+      const isInternal = uri.startsWith('/') || uri.startsWith('https://ohsoojin.com');
+      return (
+        <a
+          href={uri}
+          {...(isInternal ? {} : { target: '_blank', rel: 'noopener noreferrer' })}
+          className="text-gray-900 hover:text-gray-600 underline"
+        >
+          {children}
+        </a>
+      );
+    },
   },
 };
 
