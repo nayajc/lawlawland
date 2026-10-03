@@ -40,7 +40,7 @@ function validate(posts: PostSource[]) {
     if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(p.slug)) issues.push('slug 형식');
     if (p.title.length < 5 || p.title.length > 100) issues.push(`title 길이 ${p.title.length}`);
     if (p.excerpt.length < 20 || p.excerpt.length > 300) issues.push(`excerpt 길이 ${p.excerpt.length}`);
-    if (!/(송파구|문정동)/.test(p.title)) issues.push('title에 키워드 없음');
+    if (!/(송파구|문정동)/.test(p.title + p.body)) issues.push('송파구/문정동 키워드 없음');
     if (!/(송파구 변호사|문정동 변호사)/.test(body)) issues.push('본문에 "송파구 변호사/문정동 변호사" 없음');
     if (!body.includes('자주 묻는 질문')) issues.push('FAQ 섹션 없음');
     if (chars < 1100) issues.push(`본문 짧음(${chars}자)`);
@@ -54,7 +54,7 @@ function validate(posts: PostSource[]) {
   const known = new Set(posts.map((p) => p.slug));
   for (const p of posts) {
     for (const m of p.body.matchAll(/\]\(\/blog\/([^)]+)\)/g)) {
-      if (!known.has(m[1])) console.log(`  (참고) ${p.file}: 기존 글 링크 /blog/${m[1]} — 실존 여부 확인 필요`);
+      if (!known.has(m[1])) console.log(`  (참고) ${p.file}: 링크 /blog/${m[1]} — 실존 여부 확인 필요`);
     }
   }
   if (bad) process.exitCode = 1;

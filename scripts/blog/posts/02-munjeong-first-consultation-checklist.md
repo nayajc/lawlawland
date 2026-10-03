@@ -3,7 +3,7 @@ slug: munjeong-lawyer-first-consultation-checklist
 title: 문정동 변호사 첫 상담 준비물, 이혼 상담 전 챙길 자료 총정리
 excerpt: 문정동 변호사에게 이혼 상담을 받기 전에 준비하면 좋은 서류와 자료, 질문 목록을 정리했습니다. 준비가 잘될수록 상담 시간이 훨씬 알차집니다.
 category: 법률상식
-tags: 문정동변호사, 송파구변호사, 이혼상담준비, 이혼상담서류, 이혼전문변호사
+tags: 문정동변호사, 송파구변호사, 이혼상담준비, 이혼상담서류, 이혼변호사
 publishedAt: 2026-10-08T09:00+09:00
 imageAlt: 상담 준비 체크리스트를 상징하는 파스텔 톤 클립보드 일러스트
 imagePrompt: a minimal clipboard with a checklist of rounded check marks and a pencil, soft pastel paper layers

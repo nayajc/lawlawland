@@ -34,8 +34,19 @@ export function loadPosts(): PostSource[] {
       for (const k of ['slug', 'title', 'excerpt', 'category', 'tags', 'publishedAt', 'imageAlt', 'imagePrompt']) {
         if (!meta[k]) throw new Error(`${file}: frontmatter "${k}" 누락`);
       }
-      return { file, body: m[2].trim(), ...(meta as Omit<PostSource, 'file' | 'body'>) };
+      const post = { file, body: m[2].trim(), ...(meta as Omit<PostSource, 'file' | 'body'>) };
+      if (post.publishedAt === 'AUTO') post.publishedAt = autoSchedule(file);
+      return post;
     });
+}
+
+/** 파일 번호 11번부터 매주 월·목 09:00(KST)에 순서대로 공개 (11번 = 2026-11-09 월). 1~10번은 frontmatter에 직접 지정. */
+function autoSchedule(file: string): string {
+  const n = Number(file.match(/^(\d+)-/)?.[1]);
+  if (!n || n < 11) throw new Error(`${file}: AUTO 일정은 11번 이상 파일만 지원`);
+  const k = n - 11;
+  const d = new Date(Date.UTC(2026, 10, 9 + Math.floor(k / 2) * 7 + (k % 2) * 3));
+  return `${d.toISOString().slice(0, 10)}T09:00+09:00`;
 }
 
 // ---------- Markdown 일부 문법 → Contentful Rich Text ----------

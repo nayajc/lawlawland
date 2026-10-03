@@ -3,7 +3,7 @@ slug: songpa-divorce-lawyer-how-to-choose
 title: 송파구 변호사 선택 기준, 이혼 사건에서 꼭 확인할 5가지
 excerpt: 송파구 변호사를 찾을 때 확인해야 할 이혼 전문성, 소통 방식, 수임료 구조, 접근성, 과장 광고 여부 등 다섯 가지 기준을 정리했습니다. 상담 전에 비교해 보세요.
 category: 법률상식
-tags: 송파구변호사, 문정동변호사, 이혼변호사선택, 변호사선임, 이혼전문변호사
+tags: 송파구변호사, 문정동변호사, 이혼변호사선택, 변호사선임, 이혼변호사
 publishedAt: 2026-10-05T09:00+09:00
 imageAlt: 선택과 방향을 상징하는 파스텔 톤 이정표 일러스트
 imagePrompt: a minimal signpost with two rounded arrow signs pointing in different directions, standing on a soft hill, symbolizing choosing the right path
