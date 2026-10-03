@@ -8,7 +8,9 @@ export function Footer() {
           <div>
             <p className="text-sm font-semibold text-gray-800 mb-2">오수진 변호사 | 법무법인 큐브</p>
             <p className="text-xs text-gray-500 leading-relaxed">
-              서울특별시 송파구 법원로 92 파트너스1 3층 308호
+              대표자: 오수진 | 사업자등록번호: 428-88-00695
+              <br />
+              서울특별시 송파구 법원로 92 (문정동, 파트너스1) 3층 308호
               <br />
               Tel. 02-6953-6325 | Fax. 070-8299-6325
               <br />
