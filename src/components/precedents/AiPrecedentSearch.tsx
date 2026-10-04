@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useState } from 'react';
-import { Sparkles, Loader2 } from 'lucide-react';
+import { Sparkles, Loader2, Copy, Check, CalendarClock } from 'lucide-react';
 import type { AiPrecedentResponse, PrecedentAnalysis } from '@/lib/ai/precedent-search';
 
 const BADGE = {
@@ -19,6 +19,8 @@ export function AiPrecedentSearch() {
   const [analyses, setAnalyses] = useState<Record<string, PrecedentAnalysis>>({});
   const [analyzing, setAnalyzing] = useState(false);
   const [analysisError, setAnalysisError] = useState(false);
+  const [asked, setAsked] = useState('');
+  const [copied, setCopied] = useState(false);
 
   // 유사도 상위 3건은 판결문 전문을 읽는 심층 분석을 이어서 요청한다 (목록은 먼저 보여줌)
   async function analyze(q: string, ids: string[]) {
@@ -40,6 +42,23 @@ export function AiPrecedentSearch() {
     }
   }
 
+  // 상담 예약 화면의 '사전 질문' 칸에 붙여넣을 요약. 의뢰인이 직접 복사·제출할 때만 변호사에게 전달된다.
+  function consultSummary() {
+    if (!data) return '';
+    const cases = data.results.slice(0, 3).map((r) => `- ${r.court} ${r.caseNumber} (${r.caseName.slice(0, 40)})`).join('\n');
+    return `[AI 판례 검색 상담 요약]\n■ 상황\n${asked}\n\n■ AI 정리\n${data.answer}\n\n■ 관련 판례\n${cases}`;
+  }
+
+  async function copySummary() {
+    try {
+      await navigator.clipboard.writeText(consultSummary());
+      setCopied(true);
+    } catch {
+      document.getElementById('consult-summary')?.focus();
+      (document.getElementById('consult-summary') as HTMLTextAreaElement | null)?.select();
+    }
+  }
+
   async function submit(e: React.FormEvent) {
     e.preventDefault();
     setLoading(true);
@@ -47,6 +66,8 @@ export function AiPrecedentSearch() {
     setData(null);
     setAnalyses({});
     setAnalysisError(false);
+    setCopied(false);
+    setAsked(question);
     try {
       const res = await fetch('/api/precedents/ai', {
         method: 'POST',
@@ -128,6 +149,24 @@ export function AiPrecedentSearch() {
               );
             })}
           </ul>
+          {data.results.length > 0 && (
+            <section className="mt-6 border rounded-lg bg-white p-4" style={{ borderColor: '#D4E4F0' }}>
+              <h2 className="text-sm font-bold" style={{ color: '#1B2840' }}>이 내용으로 변호사와 상담하고 싶으신가요?</h2>
+              <p className="text-xs mt-1 leading-5" style={{ color: '#5C6F8A' }}>
+                아래 요약을 복사해 상담 예약 화면의 상담 내용 칸에 붙여넣으면 변호사가 사전에 상황을 파악할 수 있습니다.
+                복사한 내용은 직접 예약을 제출하실 때에만 전달되며, 수정하거나 지우셔도 됩니다.
+              </p>
+              <textarea id="consult-summary" readOnly value={consultSummary()} rows={6} className="w-full mt-3 border rounded-md px-3 py-2 text-xs leading-5" style={{ borderColor: '#D4E4F0', color: '#2E3B52' }} />
+              <div className="flex flex-col sm:flex-row gap-2 mt-3">
+                <button type="button" onClick={copySummary} className="inline-flex items-center justify-center gap-1.5 text-sm font-semibold px-4 py-2.5 rounded-md border" style={{ borderColor: '#1B2E4B', color: '#1B2E4B' }}>
+                  {copied ? <Check size={16} /> : <Copy size={16} />} {copied ? '복사되었습니다' : '상담 내용 복사'}
+                </button>
+                <Link href="/consult" className="inline-flex items-center justify-center gap-1.5 text-white text-sm font-semibold px-4 py-2.5 rounded-md" style={{ backgroundColor: '#1B2E4B' }}>
+                  <CalendarClock size={16} /> 상담 일정 잡기
+                </Link>
+              </div>
+            </section>
+          )}
           <p className="text-xs mt-6" style={{ color: '#8A97AB' }}>AI가 판시사항·판결요지를 바탕으로 정리한 참고 정보이며 법률 자문이 아닙니다. 원문을 꼭 확인하세요.</p>
         </div>
       )}
