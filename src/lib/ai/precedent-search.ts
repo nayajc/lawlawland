@@ -21,7 +21,7 @@ export interface AiPrecedentResponse {
 
 // 법령 API 는 공백 구분 AND 검색이므로 키워드를 짧게(1~3어) 여러 개 만든다.
 async function extractKeywords(question: string): Promise<string[]> {
-  const { object } = await generateObject({
+  const { object, usage } = await generateObject({
     model: MODEL,
     schema: z.object({ keywords: z.array(z.string().min(1).max(30)).min(2).max(4) }),
     system:
@@ -30,7 +30,20 @@ async function extractKeywords(question: string): Promise<string[]> {
       '구체적인 것부터 일반적인 것까지 2~4개를 만드세요. 예: "재산분할 기여도", "유책배우자 이혼청구", "양육비 소급".',
     prompt: question,
   });
+  logUsage('keywords', usage);
   return object.keywords.map((k) => k.trim()).filter(Boolean);
+}
+
+// Gemini 2.5 Flash 단가 (USD / 100만 토큰). 요금 변경 시 여기만 수정.
+const PRICE_IN = 0.3;
+const PRICE_OUT = 2.5;
+
+/** Vercel 로그에서 실측 비용을 집계할 수 있도록 호출마다 토큰 사용량을 JSON 한 줄로 남긴다. */
+function logUsage(step: string, usage: { promptTokens: number; completionTokens: number }) {
+  const costUsd = (usage.promptTokens * PRICE_IN + usage.completionTokens * PRICE_OUT) / 1_000_000;
+  console.log(
+    JSON.stringify({ tag: 'precedent-ai-usage', step, model: 'gemini-2.5-flash', inTokens: usage.promptTokens, outTokens: usage.completionTokens, costUsd: Number(costUsd.toFixed(5)) }),
+  );
 }
 
 const AI_CASE_TYPES = new Set(['가사', '민사']);
@@ -67,7 +80,7 @@ export async function aiSearchPrecedents(question: string): Promise<AiPrecedentR
   const details = (await Promise.all(top.map((t) => getPrecedent(t.id).catch(() => null)))).filter((d) => d !== null);
   const clip = (s: string, n: number) => toPlainText(s).slice(0, n);
 
-  const { object } = await generateObject({
+  const { object, usage: rankUsage } = await generateObject({
     model: MODEL,
     schema: z.object({
       answer: z.string().describe('질문에 대한 판례 기반 종합 설명 (한국어, 400자 이내)'),
@@ -91,6 +104,7 @@ export async function aiSearchPrecedents(question: string): Promise<AiPrecedentR
         .join('\n\n'),
   });
 
+  logUsage('rank', rankUsage);
   const byId = new Map(details.map((d) => [d.id, d]));
   const order = { high: 0, medium: 1, low: 2 };
   const results = object.ranked
@@ -121,7 +135,7 @@ export async function analyzePrecedents(question: string, ids: string[]): Promis
   if (details.length === 0) return [];
   const clip = (s: string, n: number) => toPlainText(s).slice(0, n);
 
-  const { object } = await generateObject({
+  const { object, usage } = await generateObject({
     model: MODEL,
     schema: z.object({
       analyses: z.array(
@@ -148,6 +162,7 @@ export async function analyzePrecedents(question: string, ids: string[]): Promis
         .join('\n\n---\n\n'),
   });
 
+  logUsage('analyze', usage);
   const valid = new Set(details.map((d) => d.id));
   return object.analyses.filter((a) => valid.has(a.id));
 }
