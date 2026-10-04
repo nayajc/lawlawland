@@ -108,7 +108,9 @@ async function upload(posts: PostSource[]) {
   const { cma, locale } = await getClient();
   const L = <T,>(v: T) => ({ [locale]: v });
 
+  const only = arg('only');
   for (const p of posts) {
+    if (only && p.slug !== only) continue;
     const imgPath = path.join(IMAGES_DIR, `${p.slug}-cover.png`);
     if (!existsSync(imgPath)) throw new Error(`이미지 없음: ${imgPath} (먼저 images 실행)`);
 
@@ -165,7 +167,9 @@ async function upload(posts: PostSource[]) {
 
 async function publish(posts: PostSource[]) {
   const { cma } = await getClient();
+  const only = arg('only');
   for (const p of posts) {
+    if (only && p.slug !== only) continue;
     const res = await cma.entry.getMany({ query: { content_type: BLOG_CONTENT_TYPE_ID, 'fields.slug': p.slug, limit: 1 } });
     const entry = res.items[0];
     if (!entry) { console.log(`없음 ${p.slug} (upload 먼저)`); continue; }
