@@ -1,7 +1,7 @@
 import { generateObject } from 'ai';
 import { createGoogleGenerativeAI } from '@ai-sdk/google';
 import { z } from 'zod';
-import { searchPrecedents, getPrecedent, toPlainText, type PrecedentSummary } from '@/lib/law-api';
+import { searchPrecedents, getPrecedent, toPlainText, LawApiError, type PrecedentSummary } from '@/lib/law-api';
 
 const google = createGoogleGenerativeAI({ apiKey: process.env.GEMINI_API_KEY });
 const MODEL = google('gemini-2.5-flash');
@@ -33,6 +33,8 @@ async function extractKeywords(question: string): Promise<string[]> {
   return object.keywords.map((k) => k.trim()).filter(Boolean);
 }
 
+const AI_CASE_TYPES = new Set(['가사', '민사']);
+
 const score = (p: { item: PrecedentSummary; hits: number }) => p.hits + (p.item.caseType === '가사' ? 1 : 0);
 
 export async function aiSearchPrecedents(question: string): Promise<AiPrecedentResponse> {
@@ -40,11 +42,16 @@ export async function aiSearchPrecedents(question: string): Promise<AiPrecedentR
 
   // 키워드별 검색 → 여러 키워드에 걸린 판례를 우선, 그다음 최신순
   const batches = await Promise.all(
-    keywords.map((q) => searchPrecedents({ query: q, search: '2', display: 10 }).catch(() => null)),
+    keywords.map((q) => searchPrecedents({ query: q, search: '2', display: 30 }).catch((e: unknown) => e as Error)),
   );
+  // 전부 실패하면 '결과 없음'이 아니라 API 오류로 알린다 (IP 미등록·OC 오류 등)
+  const failed = batches.filter((b): b is Error => b instanceof Error);
+  if (failed.length === batches.length) throw failed[0] instanceof LawApiError ? failed[0] : new LawApiError('판례 API 호출에 실패했습니다.');
   const pool = new Map<string, { item: PrecedentSummary; hits: number }>();
   for (const b of batches) {
-    for (const item of b?.items ?? []) {
+    if (b instanceof Error) continue;
+    for (const item of b.items) {
+      if (!AI_CASE_TYPES.has(item.caseType)) continue; // 세무·행정 등 이혼 상담과 무관한 사건 제외
       const cur = pool.get(item.id);
       if (cur) cur.hits += 1;
       else pool.set(item.id, { item, hits: 1 });

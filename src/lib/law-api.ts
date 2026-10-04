@@ -68,7 +68,10 @@ export async function searchPrecedents(opts: {
     sort: 'ddes',
   });
   const root = json.PrecSearch;
-  if (!root) throw new LawApiError(typeof json.Law === 'string' ? json.Law : '검색 결과를 불러오지 못했습니다.');
+  if (!root) {
+    const msg = typeof json.Law === 'string' ? json.Law : typeof json.msg === 'string' ? json.msg : '';
+    throw new LawApiError(msg ? `법령 API: ${msg}` : '검색 결과를 불러오지 못했습니다.');
+  }
   const raw = Array.isArray(root.prec) ? root.prec : root.prec ? [root.prec] : [];
   return {
     total: Number(root.totalCnt) || 0,
