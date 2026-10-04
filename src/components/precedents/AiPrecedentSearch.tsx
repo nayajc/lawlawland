@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { useState } from 'react';
 import { Sparkles, Loader2 } from 'lucide-react';
-import type { AiPrecedentResponse } from '@/lib/ai/precedent-search';
+import type { AiPrecedentResponse, PrecedentAnalysis } from '@/lib/ai/precedent-search';
 
 const BADGE = {
   high: { label: '관련도 높음', bg: '#E6F4EA', fg: '#1E6B35' },
@@ -16,12 +16,37 @@ export function AiPrecedentSearch() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [data, setData] = useState<AiPrecedentResponse | null>(null);
+  const [analyses, setAnalyses] = useState<Record<string, PrecedentAnalysis>>({});
+  const [analyzing, setAnalyzing] = useState(false);
+  const [analysisError, setAnalysisError] = useState(false);
+
+  // 유사도 상위 3건은 판결문 전문을 읽는 심층 분석을 이어서 요청한다 (목록은 먼저 보여줌)
+  async function analyze(q: string, ids: string[]) {
+    if (ids.length === 0) return;
+    setAnalyzing(true);
+    try {
+      const res = await fetch('/api/precedents/ai/analyze', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ question: q, ids }),
+      });
+      const json = await res.json();
+      if (!res.ok) throw new Error(json.error);
+      setAnalyses(Object.fromEntries((json.analyses as PrecedentAnalysis[]).map((a) => [a.id, a])));
+    } catch {
+      setAnalysisError(true);
+    } finally {
+      setAnalyzing(false);
+    }
+  }
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
     setLoading(true);
     setError(null);
     setData(null);
+    setAnalyses({});
+    setAnalysisError(false);
     try {
       const res = await fetch('/api/precedents/ai', {
         method: 'POST',
@@ -31,6 +56,7 @@ export function AiPrecedentSearch() {
       const json = await res.json();
       if (!res.ok) throw new Error(json.error ?? '검색에 실패했습니다.');
       setData(json);
+      void analyze(question, (json as AiPrecedentResponse).results.slice(0, 3).map((r) => r.id));
     } catch (err) {
       setError(err instanceof Error ? err.message : '검색에 실패했습니다.');
     } finally {
@@ -68,7 +94,10 @@ export function AiPrecedentSearch() {
             <div className="text-xs mt-3" style={{ color: '#8A97AB' }}>사용한 검색어: {data.keywords.join(' · ')}</div>
           </div>
           <ul className="space-y-3">
-            {data.results.map((r) => (
+            {data.results.map((r, idx) => {
+              const a = analyses[r.id];
+              const top3 = idx < 3;
+              return (
               <li key={r.id} className="border rounded-lg bg-white p-4" style={{ borderColor: '#D4E4F0' }}>
                 <div className="flex items-start justify-between gap-2">
                   <Link href={`/precedents/${r.id}`} className="font-semibold text-sm hover:underline" style={{ color: '#1B2840' }}>
@@ -81,8 +110,23 @@ export function AiPrecedentSearch() {
                 <p className="text-xs mt-0.5" style={{ color: '#8A97AB' }}>선고 {r.date}</p>
                 <p className="text-sm mt-2 leading-6" style={{ color: '#2E3B52' }}>{r.reason}</p>
                 {r.summary && <p className="text-xs mt-2 leading-5 line-clamp-3" style={{ color: '#5C6F8A' }}>판결요지: {r.summary}</p>}
+                {top3 && a && (
+                  <dl className="mt-3 rounded-md p-3 text-sm leading-6 space-y-2" style={{ backgroundColor: '#F3F8FC', color: '#2E3B52' }}>
+                    <div className="text-xs font-semibold" style={{ color: '#1B2E4B' }}>AI 심층 분석 (유사도 상위 {idx + 1}위)</div>
+                    {([['사실관계', a.facts], ['법원의 판단', a.holding], ['내 상황에 대한 시사점', a.implication], ['유의할 점', a.caution]] as const).map(([k, v]) => (
+                      <div key={k}><dt className="font-semibold text-xs" style={{ color: '#5C6F8A' }}>{k}</dt><dd>{v}</dd></div>
+                    ))}
+                  </dl>
+                )}
+                {top3 && !a && analyzing && (
+                  <p className="mt-3 text-xs flex items-center gap-1.5" style={{ color: '#8A97AB' }}><Loader2 size={12} className="animate-spin" /> 판결문 전문을 읽고 분석하는 중…</p>
+                )}
+                {top3 && !a && !analyzing && analysisError && (
+                  <p className="mt-3 text-xs" style={{ color: '#8A97AB' }}>심층 분석을 불러오지 못했습니다. 상세 페이지에서 원문을 확인하세요.</p>
+                )}
               </li>
-            ))}
+              );
+            })}
           </ul>
           <p className="text-xs mt-6" style={{ color: '#8A97AB' }}>AI가 판시사항·판결요지를 바탕으로 정리한 참고 정보이며 법률 자문이 아닙니다. 원문을 꼭 확인하세요.</p>
         </div>

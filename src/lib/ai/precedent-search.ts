@@ -74,7 +74,8 @@ export async function aiSearchPrecedents(question: string): Promise<AiPrecedentR
     }),
     system:
       '당신은 이혼·가사 전문 변호사를 돕는 판례 분석 어시스턴트입니다. 반드시 제공된 판례의 판시사항·판결요지에 적힌 내용만 근거로 삼고, ' +
-      '없는 판례나 법리를 만들지 마세요. 질문과 무관한 판례는 relevance=low 로 표시하세요. ' +
+      '없는 판례나 법리를 만들지 마세요. 관련도는 같은 법리를 언급하는지가 아니라, 질문자의 구체적 사실관계(당사자 지위, 쟁점, 청구 형태)와 얼마나 일치하는지로 판단하세요. ' +
+      '같은 법리라도 사안 유형이 다르면(예: 사망 후 상속인 상대 청구) medium 이하로, 질문과 무관하면 low 로 표시하세요. ' +
       'answer 에는 사건번호를 근거로 명시하고, 개별 사안의 결론을 단정하지 말고 일반적 법리 정보로 설명하세요.',
     prompt:
       `질문: ${question}\n\n판례 목록:\n` +
@@ -97,4 +98,49 @@ export async function aiSearchPrecedents(question: string): Promise<AiPrecedentR
       };
     });
   return { keywords, answer: object.answer, results };
+}
+
+export interface PrecedentAnalysis {
+  id: string;
+  facts: string;
+  holding: string;
+  implication: string;
+  caution: string;
+}
+
+/** 유사도 상위 판례의 전문을 읽고 사실관계·법원 판단·질문자 상황에의 시사점을 정리한다. */
+export async function analyzePrecedents(question: string, ids: string[]): Promise<PrecedentAnalysis[]> {
+  const details = (await Promise.all(ids.map((id) => getPrecedent(id).catch(() => null)))).filter((d) => d !== null);
+  if (details.length === 0) return [];
+  const clip = (s: string, n: number) => toPlainText(s).slice(0, n);
+
+  const { object } = await generateObject({
+    model: MODEL,
+    schema: z.object({
+      analyses: z.array(
+        z.object({
+          id: z.string(),
+          facts: z.string().describe('이 판례의 사실관계 요약 (2~3문장)'),
+          holding: z.string().describe('법원의 판단과 그 핵심 논리 (2~3문장)'),
+          implication: z.string().describe('질문자의 상황에 적용할 때의 시사점 (2~3문장)'),
+          caution: z.string().describe('사안이 다를 수 있는 점, 이 판례만으로 단정할 수 없는 점 (1~2문장)'),
+        }),
+      ),
+    }),
+    system:
+      '당신은 이혼·가사 전문 변호사를 돕는 판례 분석 어시스턴트입니다. 제공된 판례 원문에 적힌 내용만 근거로 분석하고, ' +
+      '원문에 없는 사실이나 법리를 만들지 마세요. 질문자의 결론을 단정하거나 승소를 보장하는 표현은 쓰지 말고, ' +
+      '일반적인 법리 정보와 시사점으로 설명하세요. 쉬운 한국어로 쓰되 사건번호와 법리 용어는 정확히 쓰세요.',
+    prompt:
+      `질문자 상황: ${question}\n\n` +
+      details
+        .map(
+          (d) =>
+            `[id=${d.id}] ${d.court} ${d.caseNumber} (${d.date}) ${d.caseName}\n판시사항: ${clip(d.issue, 600)}\n판결요지: ${clip(d.summary, 1500)}\n판결문: ${clip(d.content, 5000)}`,
+        )
+        .join('\n\n---\n\n'),
+  });
+
+  const valid = new Set(details.map((d) => d.id));
+  return object.analyses.filter((a) => valid.has(a.id));
 }
