@@ -44,7 +44,7 @@ function validate(posts: PostSource[]) {
     if (!/(송파구 변호사|문정동 변호사)/.test(body)) issues.push('본문에 "송파구 변호사/문정동 변호사" 없음');
     if (!body.includes('자주 묻는 질문')) issues.push('FAQ 섹션 없음');
     if (chars < 1100) issues.push(`본문 짧음(${chars}자)`);
-    if (!['이혼절차', '재산분할', '양육권', '위자료', '법률상식', '승소사례'].includes(p.category)) issues.push('category');
+    if (!['이혼절차', '재산분할', '양육권', '위자료', '법률상식', '상속', '승소사례'].includes(p.category)) issues.push('category');
     if (Number.isNaN(Date.parse(p.publishedAt))) issues.push('publishedAt');
     const kw = (body.match(/송파구 변호사|문정동 변호사/g) ?? []).length;
     console.log(`${issues.length ? '✗' : '✓'} ${p.file}  제목${p.title.length}자 본문${chars}자 키워드${kw}회 | meta: ${desc.length}자 "${desc}"${issues.length ? '\n    ' + issues.join(', ') : ''}`);
