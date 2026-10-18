@@ -20,14 +20,14 @@ export function Header() {
 
   return (
     <header className="sticky top-0 z-50 backdrop-blur-md border-b" style={{ backgroundColor: 'color-mix(in oklch, var(--pure-white) 90%, transparent)', borderColor: 'var(--soft-border)' }}>
-      <div className="max-w-5xl mx-auto px-4 h-14 flex items-center justify-between">
+      <div className="max-w-5xl mx-auto px-4 h-16 flex items-center justify-between">
         <Link href="/" className="flex items-center gap-2.5 shrink-0">
-          <div className="w-8 h-8 rounded flex items-center justify-center" style={{ border: '1px solid var(--gold)' }}>
-            <span className="text-[11px] font-bold tracking-tight" style={{ color: 'var(--gold)' }}>OSJ</span>
+          <div className="w-11 h-11 rounded flex items-center justify-center" style={{ border: '1.5px solid var(--gold)' }}>
+            <span className="text-[15px] font-bold tracking-tight" style={{ color: 'var(--gold)' }}>OSJ</span>
           </div>
           <div>
-            <div className="font-bold text-base leading-none tracking-tight" style={{ color: 'var(--body-text)' }}>오수진 변호사</div>
-            <div className="text-[10px] tracking-wide mt-0.5" style={{ color: 'var(--muted-fg)' }}>이혼 · 가사 전문</div>
+            <div className="font-bold text-xl leading-none tracking-tight" style={{ color: 'var(--body-text)' }}>오수진 변호사</div>
+            <div className="text-xs tracking-wide mt-1" style={{ color: 'var(--muted-fg)' }}>이혼 · 가사 전문</div>
           </div>
         </Link>
 

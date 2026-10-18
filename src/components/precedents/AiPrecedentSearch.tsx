@@ -97,9 +97,9 @@ export function AiPrecedentSearch() {
           className="w-full border rounded-md px-3 py-2.5 text-sm leading-6"
           style={{ borderColor: '#D4E4F0' }}
         />
-        <div className="flex items-center justify-between mt-2">
-          <span className="text-xs" style={{ color: '#8A97AB' }}>개인정보(실명·주민번호 등)는 입력하지 마세요.</span>
-          <button disabled={loading || question.trim().length < 5} className="inline-flex items-center gap-1.5 text-white text-sm font-semibold px-5 py-2.5 rounded-md disabled:opacity-50" style={{ backgroundColor: '#1B2E4B' }}>
+        <div className="flex items-center justify-between gap-3 mt-2">
+          <span className="text-xs min-w-0" style={{ color: '#8A97AB' }}>개인정보(실명·주민번호 등)는 입력하지 마세요.</span>
+          <button disabled={loading || question.trim().length < 5} className="inline-flex shrink-0 items-center gap-1.5 whitespace-nowrap text-white text-sm font-semibold px-5 py-2.5 rounded-md disabled:opacity-50" style={{ backgroundColor: '#1B2E4B' }}>
             {loading ? <Loader2 size={16} className="animate-spin" /> : <Sparkles size={16} />} AI로 판례 찾기
           </button>
         </div>
