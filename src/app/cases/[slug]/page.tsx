@@ -4,6 +4,7 @@ import Link from 'next/link';
 import type { Metadata } from 'next';
 import { ArrowLeft, ArrowRight, MessageCircle } from 'lucide-react';
 import { CaseCategoryBadge } from '@/components/cases/CaseCategoryBadge';
+import { RelatedContent } from '@/components/cases/RelatedContent';
 import { getAdjacentWinCases, getAllWinCaseSlugs, getWinCaseBySlug, getWinCaseSlugByNumber, parseCaseDetail } from '@/lib/contentful/cases';
 import { DEFAULT_OG_IMAGE, snippetDescription, truncateTitle } from '@/lib/seo';
 
@@ -174,6 +175,8 @@ export default async function CasePage({ params }: CasePageProps) {
             판결문의 개인정보는 비식별 처리되어 있습니다.
           </p>
         </section>
+
+        <RelatedContent current={c} />
 
         {/* 상담 유도 */}
         <aside className="mt-10 rounded-2xl p-6 text-center" style={{ backgroundColor: '#1B2E4B' }}>
