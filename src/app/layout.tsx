@@ -12,8 +12,8 @@ const geistSans = Geist({
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://ohsoojin.com'),
-  title: '이혼전문변호사 오수진 | 이혼·양육권·재산분할 상담',
-  description: '이혼전문변호사 오수진. 이혼 사유, 재산분할, 위자료, 양육권 상담과 승소사례와 판결문을 확인하세요.',
+  title: '오수진 변호사 | 이혼·양육권·재산분할 상담',
+  description: '법무법인 큐브 서울사무소 오수진 변호사. 이혼 사유, 재산분할, 위자료, 양육권 상담과 승소사례·판결문을 확인하세요.',
   keywords: ['오수진 변호사', '이혼전문변호사', '이혼', '법률 상담', 'AI 상담', '양육비', '위자료', '재산분할', '양육권', '승소사례', '법무법인 큐브'],
   robots: {
     index: true,
@@ -21,18 +21,18 @@ export const metadata: Metadata = {
     googleBot: { index: true, follow: true, 'max-image-preview': 'large', 'max-snippet': -1 },
   },
   openGraph: {
-    title: '이혼전문변호사 오수진 | 이혼·양육권·재산분할 상담',
-    description: '이혼 사유, 재산분할, 위자료, 양육권 상담과 승소사례와 판결문을 확인하세요.',
+    title: '오수진 변호사 | 이혼·양육권·재산분할 상담',
+    description: '법무법인 큐브 서울사무소 오수진 변호사. 이혼 사유, 재산분할, 위자료, 양육권 상담과 승소사례·판결문을 확인하세요.',
     type: 'website',
     siteName: '오수진 변호사',
     locale: 'ko_KR',
     url: 'https://ohsoojin.com',
-    images: [{ url: 'https://ohsoojin.com/og-image.png', width: 1200, height: 630, alt: '이혼전문변호사 오수진' }],
+    images: [{ url: 'https://ohsoojin.com/og-image.png', width: 1200, height: 630, alt: '오수진 변호사' }],
   },
   twitter: {
     card: 'summary_large_image',
-    title: '이혼전문변호사 오수진 | 이혼·양육권·재산분할 상담',
-    description: '이혼 사유, 재산분할, 위자료, 양육권 상담과 승소사례와 판결문을 확인하세요.',
+    title: '오수진 변호사 | 이혼·양육권·재산분할 상담',
+    description: '법무법인 큐브 서울사무소 오수진 변호사. 이혼 사유, 재산분할, 위자료, 양육권 상담과 승소사례·판결문을 확인하세요.',
     images: ['https://ohsoojin.com/og-image.png'],
   },
   alternates: {
@@ -67,9 +67,18 @@ export default function RootLayout({
               '@context': 'https://schema.org',
               '@type': 'Attorney',
               name: '오수진',
-              jobTitle: '이혼전문변호사',
+              alternateName: ['오수진 변호사', '변호사 오수진'],
+              jobTitle: '변호사',
               url: 'https://ohsoojin.com',
-              description: '이혼전문변호사 오수진. 이혼, 상간위자료, 재산분할, 양육권 소송 전문.',
+              image: 'https://ohsoojin.com/ohsoojin1.png',
+              worksFor: { '@type': 'LegalService', name: '법무법인 큐브', url: 'https://cubelaw.co.kr' },
+              sameAs: [
+                'https://cubelaw.co.kr/sub/detail_lawyer.php?uid=3',
+                'https://ko.wikipedia.org/wiki/오수진_(변호사)',
+                'https://www.youtube.com/@ohsoojin',
+                'https://www.instagram.com/ohsoojin',
+              ],
+              description: '법무법인 큐브 서울사무소 오수진 변호사. 이혼, 상간위자료, 재산분할, 양육권 소송.',
               memberOf: {
                 '@type': 'LegalService',
                 name: '법무법인 큐브',

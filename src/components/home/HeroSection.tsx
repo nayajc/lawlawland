@@ -27,7 +27,7 @@ export function HeroSection() {
           <div className="text-center md:text-left flex-1">
             <div className="inline-flex items-center gap-1.5 border border-white/20 rounded-full px-3 py-1 text-xs font-medium mb-4 tracking-wide uppercase" style={{ color: 'var(--gold-lt)' }}>
               <Award className="w-3 h-3" />
-              이혼 · 양육권 · 재산분할 전문
+              오수진 변호사 · 이혼 · 양육권 · 재산분할
             </div>
             <h1 className="text-3xl md:text-4xl font-bold text-white leading-tight mb-3 tracking-tight">
               가장 힘든 결정 앞에서
