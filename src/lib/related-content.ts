@@ -41,7 +41,7 @@ const TOPICS: { re: RegExp; category?: string; slug?: string }[] = [
   { re: /가압류|가처분|보전|압류|집행정지|강제집행|provisional|garnish|compulsory|execution/, slug: 'munjeong-provisional-seizure-protect-assets' },
 ];
 
-const getBlogPostsCached = unstable_cache(async () => getAllBlogPosts(), ['related-blog-posts'], { revalidate: 3600 });
+const getBlogPostsCached = unstable_cache(async () => getAllBlogPosts(), ['related-blog-posts'], { revalidate: 86400 });
 
 export async function pickRelatedPosts(current: WinCase, limit = 2): Promise<BlogPostListItem[]> {
   const haystack = `${current.title} ${current.summary ?? ''} ${current.slug} ${current.originalTag ?? ''}`;

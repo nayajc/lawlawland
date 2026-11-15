@@ -1,3 +1,4 @@
+import { cache } from 'react';
 import { unstable_cache } from 'next/cache';
 import { contentfulClient } from './client';
 import type { WinCase, WinCaseCategory, WinCaseImage, WinCaseListItem } from '@/types';
@@ -93,13 +94,13 @@ async function fetchAllWinCases(): Promise<WinCaseListItem[]> {
   }
 }
 
-/** 전체 목록. 서버 캐시 1시간 (방문마다 Contentful API를 호출하지 않도록). */
+/** 전체 목록. 서버 캐시 1일 (방문마다 Contentful API를 호출하지 않도록). */
 export const getAllWinCases = unstable_cache(fetchAllWinCases, ['win-cases-all'], {
-  revalidate: 3600,
+  revalidate: 86400,
   tags: ['win-cases'],
 });
 
-export async function getWinCaseBySlug(slug: string): Promise<WinCase | null> {
+async function fetchWinCaseBySlug(slug: string): Promise<WinCase | null> {
   if (!contentfulClient) return null;
   try {
     const res = await contentfulClient.getEntries({
@@ -111,10 +112,19 @@ export async function getWinCaseBySlug(slug: string): Promise<WinCase | null> {
     if (res.items.length === 0) return null;
     return mapCase(res.items[0]);
   } catch (error) {
+    // null을 돌려주면 '없는 사례'로 하루 동안 캐시되므로 던진다. ISR은 실패 시 기존 페이지를 유지한다.
     console.error(`Failed to fetch win case "${slug}":`, error);
-    return null;
+    throw error;
   }
 }
+
+/**
+ * 상세 1건. generateMetadata와 페이지 본문이 같은 요청 안에서 두 번 부르므로
+ * React cache로 한 번만 호출하고, 데이터 캐시(1일)로 재생성 때도 Contentful을 다시 부르지 않는다.
+ */
+export const getWinCaseBySlug = cache(
+  unstable_cache(fetchWinCaseBySlug, ['win-case-by-slug'], { revalidate: 86400, tags: ['win-cases'] }),
+);
 
 /** 예전 주소(/cases/case-269) 리다이렉트용: 사례 번호로 현재 slug 조회 */
 export async function getWinCaseSlugByNumber(caseNumber: number): Promise<string | null> {

@@ -14,7 +14,8 @@ interface CasePageProps {
 
 const SITE = 'https://ohsoojin.com';
 
-export const revalidate = 3600;
+// 판결 사례는 거의 바뀌지 않으므로 하루 1회만 다시 만든다 (봇 크롤링 시 서버 CPU 절약).
+export const revalidate = 86400;
 
 // 빌드 시에는 최신 30건만 미리 생성. 나머지는 첫 방문 때 생성 후 ISR 캐시 (Contentful 호출 제한 회피).
 export async function generateStaticParams() {
